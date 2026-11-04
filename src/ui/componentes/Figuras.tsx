@@ -41,7 +41,7 @@ export function FiguraElemento({ nivel, id, dx = 0, dy = 0 }: PropsElemento) {
   const el = nivel.elementos[id];
   if (!el) return null;
   return (
-    <g className="elemento" style={conRelleno(el.color)}>
+    <g className="elemento" data-elemento={id} style={conRelleno(el.color)}>
       {el.forma.map(([x, y]) => (
         <Bloque key={`${x},${y}`} x={dx + x} y={dy + y} clase="bloque--elemento" />
       ))}

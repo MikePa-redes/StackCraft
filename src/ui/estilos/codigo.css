@@ -33,7 +33,16 @@
   white-space: pre;
 }
 
-.codigo__linea { line-height: var(--alto-linea-codigo); padding-left: var(--espacio-chico); }
+.codigo__linea {
+  line-height: var(--alto-linea-codigo);
+  padding-left: var(--espacio-chico);
+  border-radius: var(--radio);
+  transition: background-color var(--transicion-movimiento) var(--transicion-curva);
+}
+
+.codigo__linea--actual { background: var(--color-codigo-linea-actual); }
+.codigo__linea--error { background: var(--color-codigo-linea-error); }
+.codigo__linea--error::marker { color: var(--color-codigo-error); font-weight: 600; }
 .codigo__linea::marker { color: var(--color-codigo-numero); }
 .codigo__aviso { margin: auto; color: var(--color-codigo-numero); font-size: var(--texto-pequeno); }
 
@@ -54,7 +63,8 @@
   font: inherit;
 }
 
-.hueco:disabled { opacity: 1; }
+.hueco:disabled { opacity: 1; cursor: default; }
+.hueco:focus-visible { outline: var(--borde) solid var(--color-codigo-objeto); outline-offset: 0; }
 .hueco--texto { width: 10ch; }
 
 /* ---- 7. Avatar (marcador neutro) ---- */

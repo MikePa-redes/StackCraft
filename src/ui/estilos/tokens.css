@@ -38,6 +38,9 @@
   --color-codigo-funcion: #ffc46b;
   --color-codigo-literal: #9be0b4;
   --color-codigo-comentario: #8a8fa8;
+  --color-codigo-linea-actual: rgb(142 202 230 / 0.16);
+  --color-codigo-linea-error: rgb(230 57 70 / 0.24);
+  --color-codigo-error: #ff8a8a;
   --color-hueco-fondo: #34384f;
   --color-hueco-borde: #5b6080;
 
@@ -57,6 +60,8 @@
 
   /* Movimiento */
   --transicion-duracion: 250ms;
+  --transicion-movimiento: 200ms;
+  --capa-volador: 50;
   --transicion-curva: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* Medidas */

@@ -9,7 +9,7 @@
 - [x] Fase 4: validador y verificador de niveles
 - [x] Fase 5: reducer de partida
 - [x] Fase 6: interfaz estática
-- [ ] Fase 7: panel de código y ejecución
+- [x] Fase 7: panel de código y ejecución
 - [ ] Fase 8: colocación, pistas, resultados y guardado
 - [ ] Fase 9: cierre del MVP
 
@@ -179,3 +179,37 @@
   `intro_N05` y `exito_generico`).
 - Estilos: `tokens.css` (variables nuevas de color, medidas y trazos),
   `juego.css` (distribución, paneles, SVG) y `codigo.css` (código y avatar).
+
+### Fase 7 (2026-11-04)
+
+- `motor/reproduccion.ts` (con pruebas): `aplicarEvento`,
+  `estadosIntermedios` (estados para animar; no recalculan fija, inv. 6),
+  `rellenarPlantilla` y `huecosCompletos`. El reducer no cambió.
+- `ui/useEjecucion.ts`: valores de huecos por pieza (se conservan al
+  cambiar de pieza y al deshacer), despacha `ejecutar` con la plantilla
+  rellenada y reproduce `ultimaEjecucion` sobre el estado previo. Mientras
+  dura la animación la UI dibuja el estado intermedio (`juegoVisible`) y
+  bloquea huecos, selección de piezas y Deshacer.
+- Ejecutar: un evento cada 450 ms. Paso a paso (decidido con el usuario):
+  analiza y simula todo al pulsarlo; cada clic en "Siguiente paso" muestra
+  una operación; Ejecutar durante el paso a paso termina el resto solo. Una
+  ejecución sin errores se cierra sola al llegar al final.
+- Error: tras la última operación válida, el siguiente paso resalta en rojo
+  la línea que falla, el avatar lo explica y se vuelve al estado previo.
+  Los errores del analizador se muestran de inmediato (todas sus líneas en
+  rojo; el avatar explica el primero). El resaltado se borra al editar un
+  hueco o cambiar de pieza.
+- Ejecutar y Paso a paso exigen todos los huecos con valor.
+- Animación (`componentes/Volador.tsx`, FLIP): una copia del elemento viaja
+  del rectángulo de origen al de destino con `transform` y transición CSS
+  de `--transicion-movimiento` (200 ms); el elemento real se oculta
+  (`.en-vuelo`) mientras tanto. Los elementos llevan `data-elemento`; se
+  buscan fuera de la matriz.
+- Avatar: `ui/textoAvatar.ts` arma el texto con claves de
+  `dialogos.es.json`: `error_<CODIGO>`, `error_linea`, `error_restaurado`
+  (más el detalle del motor), `ejecucion_ok`, `pieza_fija`; si no, el
+  `inicio` del nivel.
+- Las tarjetas del panel de piezas ahora seleccionan la pieza (clic o
+  Enter).
+- Pendiente para más adelante: en paso a paso no se marca la línea
+  siguiente antes del primer clic.

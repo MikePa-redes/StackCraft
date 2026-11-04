@@ -10,7 +10,13 @@ const NOMBRE_ESTADO: Record<EstadoVisualPieza, string> = {
 };
 
 /** Área 2: piezas del nivel en su orden, con identificador y estado. */
-export function PanelPiezas({ partida }: { partida: Partida }) {
+interface Props {
+  partida: Partida;
+  /** Sin función, las tarjetas no se pueden seleccionar (p. ej. durante una animación). */
+  alSeleccionar?: (id: string) => void;
+}
+
+export function PanelPiezas({ partida, alSeleccionar }: Props) {
   const { nivel, juego, seleccionada } = partida;
   return (
     <section className="area piezas" aria-label="Piezas">
@@ -23,7 +29,16 @@ export function PanelPiezas({ partida }: { partida: Partida }) {
           const caja = cajaDe(celdasVisibles(nivel, pieza, ep.acoplados));
           const clase = `tarjeta tarjeta--${ep.estado}${seleccionada === id ? ' tarjeta--seleccionada' : ''}`;
           return (
-            <li key={id} className={clase}>
+            <li
+              key={id}
+              className={clase}
+              role="button"
+              tabIndex={0}
+              aria-pressed={seleccionada === id}
+              aria-disabled={!alSeleccionar}
+              onClick={() => alSeleccionar?.(id)}
+              onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && alSeleccionar?.(id)}
+            >
               <Lienzo caja={caja} clase="lienzo--pieza" etiqueta={`Pieza ${id}`}>
                 <FiguraPieza nivel={nivel} pieza={pieza} acoplados={ep.acoplados} estado={ep.estado} anclajesLibres />
               </Lienzo>

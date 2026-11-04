@@ -121,6 +121,9 @@
   border-radius: var(--radio);
 }
 
+.tarjeta { cursor: pointer; transition: border-color var(--transicion-duracion) var(--transicion-curva); }
+.tarjeta[aria-disabled='true'] { cursor: default; }
+.tarjeta:focus-visible { outline: var(--borde-grueso) solid var(--color-acento); outline-offset: var(--borde); }
 .tarjeta--seleccionada { border-color: var(--color-acento); box-shadow: var(--sombra); }
 .tarjeta--en_espera { opacity: 0.6; }
 .tarjeta__info { display: flex; flex-direction: column; align-items: flex-start; gap: var(--espacio-mini); }
@@ -215,3 +218,15 @@
   pointer-events: none;
 }
 .bloque__letra--anclaje { fill: var(--color-texto-secundario); stroke: none; font-weight: 400; }
+
+/* ---- Animación de movimientos (Volador) ---- */
+.volador {
+  position: fixed;
+  z-index: var(--capa-volador);
+  pointer-events: none;
+  transform-origin: 0 0;
+  transition: transform var(--transicion-movimiento) var(--transicion-curva);
+}
+
+.volador .lienzo { display: block; width: 100%; height: 100%; }
+.en-vuelo { visibility: hidden; }

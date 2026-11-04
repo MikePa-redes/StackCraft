@@ -1,4 +1,19 @@
 {
   "intro_N05": "Algunas piezas traen elementos que no les corresponden. Desármalas usando la pila y vuelve a armarlas para que encajen en la matriz.",
-  "exito_generico": "¡Muy bien! Completaste la matriz."
+  "exito_generico": "¡Muy bien! Completaste la matriz.",
+  "ejecucion_ok": "Listo. Si la pieza aún no coincide con su silueta, puedes desarmarla y volver a intentarlo.",
+  "pieza_fija": "¡La pieza quedó fija! Ya no se puede desarmar. Pronto podrás llevarla a la matriz.",
+  "error_linea": "Línea {linea}:",
+  "error_SINTAXIS": "Esta línea no sigue la forma permitida. Revisa paréntesis, comillas y nombres.",
+  "error_OPERACION_NO_PERMITIDA": "Esa operación todavía no está disponible en este nivel.",
+  "error_METODO_INEXISTENTE": "Ese método no existe aquí. Recuerda: la pila usa push y pop; la cola usa enqueue y dequeue.",
+  "error_ELEMENTO_NO_DISPONIBLE": "Ese elemento no está en la bandeja.",
+  "error_ESTRUCTURA_VACIA": "No hay nada que sacar: la estructura está vacía.",
+  "error_EXTRACCION_SIN_DESTINO": "Sacaste un elemento pero no le diste destino. Envíalo a algún lugar.",
+  "error_PIEZA_FIJA": "Esa pieza ya está fija y no se puede desarmar.",
+  "error_PIEZA_SIN_MOVIBLES": "Esa pieza ya no tiene elementos que desarmar.",
+  "error_PIEZA_COMPLETA": "La pieza ya no tiene anclajes libres.",
+  "error_NO_ENCAJA": "El elemento choca con el núcleo o con otro elemento en ese anclaje.",
+  "error_LIMITE_OPERACIONES": "Se superó el máximo de operaciones en una sola ejecución.",
+  "error_restaurado": "Nada cambió: todo volvió a como estaba antes de ejecutar."
 }
