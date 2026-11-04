@@ -1,7 +1,7 @@
 // Recalcula el estado visual de cada pieza (en espera, incompleta, fija).
 // Se usa al cargar el nivel y al TERMINAR cada ejecución, nunca a mitad.
 
-import { coincideObjetivo } from './formas';
+import { esFija } from './validador';
 import type { EstadoPieza, Nivel } from './tipos';
 
 /**
@@ -22,7 +22,7 @@ export function recalcularEstados(
     let estado: EstadoPieza['estado'];
     if (actual.estado === 'colocada' || actual.estado === 'fija') {
       estado = actual.estado;
-    } else if (coincideObjetivo(nivel, pieza, actual.acoplados)) {
+    } else if (esFija(nivel, pieza, actual.acoplados)) {
       estado = 'fija';
     } else if (!hayActiva) {
       estado = 'incompleta';

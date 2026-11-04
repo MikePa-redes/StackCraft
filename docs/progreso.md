@@ -6,7 +6,7 @@
 - [x] Fase 1: tipos y carga de niveles
 - [x] Fase 2: analizador
 - [x] Fase 3: simulador
-- [ ] Fase 4: validador y verificador de niveles
+- [x] Fase 4: validador y verificador de niveles
 - [ ] Fase 5: reducer de partida
 - [ ] Fase 6: interfaz estática
 - [ ] Fase 7: panel de código y ejecución
@@ -97,3 +97,27 @@
   quedan fijas; comprueba 1, 2, 5, 7 y 10. Pruebas puntuales para 2, 3, 4,
   7 y 10. `ayudasPrueba.ts` tiene utilidades solo para pruebas.
 - No existe `AGENTS.md`: los invariantes están en CLAUDE.md.
+
+### Fase 4 (2026-11-04)
+
+- `validador.ts`: `formaPieza`, `formaObjetivo` (celdas relativas: núcleo +
+  elementos en sus anclajes), `esFija` (forma por anclaje, vía
+  `coincideObjetivo`; compara formas, no ids), `celdasOcupadas`,
+  `colocarPieza` y `nivelCompleto`. `recalcularEstados` usa `esFija`.
+- Colocación: el origen de la pieza va en (x, y); se acepta si (x, y) es la
+  `posicionObjetivo` de alguna pieza con la misma forma final, todas sus
+  celdas son `vacia` y ninguna está ocupada por referencias o colocadas.
+  Motivos de rechazo: PIEZA_INEXISTENTE, NO_FIJA, HUECO_INVALIDO, OCUPADO
+  (para la UI de la Fase 8; no son códigos de error del código).
+- Nivel completo: toda celda que no sea `fuera` está ocupada.
+- `verificador.ts` (puro, en el motor para poder probarlo): rellena cada
+  plantilla con su solución, la ejecuta en el orden de `ordenPiezas`
+  (salta piezas que ya empiezan fijas), exige que cada pieza quede fija,
+  bandeja/pila/cola vacías, cobertura exacta de la matriz sin solapes
+  (celdas `fija` = celdas de referencia) y coloca cada pieza en su
+  `posicionObjetivo` hasta completar el nivel.
+- La unicidad de la solución (§10) no se comprueba todavía.
+- `npm run verificar` → `scripts/ejecutar.mjs`, que carga
+  `scripts/verificar-niveles.ts` con `runnerImport` de Vite (TS, JSON e
+  `import.meta.glob` sin dependencias nuevas). Sale con código 1 si algún
+  nivel falla.
