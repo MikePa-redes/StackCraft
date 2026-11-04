@@ -4,7 +4,7 @@
 
 - [x] Fase 0: proyecto base
 - [x] Fase 1: tipos y carga de niveles
-- [ ] Fase 2: analizador
+- [x] Fase 2: analizador
 - [ ] Fase 3: simulador
 - [ ] Fase 4: validador y verificador de niveles
 - [ ] Fase 5: reducer de partida
@@ -48,3 +48,29 @@
   validador de la Fase 4 debe reutilizarlo.
 - Operaciones válidas: push, pop, enqueue, dequeue, armar, desarmar,
   devolver (sección 8 de mecánicas).
+
+### Fase 2 (2026-11-04)
+
+- `lexico.ts`: `tokenizar(linea)` (nombre, texto, punto, paréntesis, coma,
+  comentario con columna). Se reutilizará para el resaltado del panel.
+- `analizador.ts`: `analizar(codigo, operacionesPermitidas)` →
+  `{ ok, instrucciones }` o `{ ok: false, errores }` con un error por línea
+  (`linea`, `codigo`, `mensaje`). Descenso recursivo por línea y luego
+  conversión semántica a `Instruccion { linea, destino, fuente }`.
+- Destinos: `pila` (push), `cola` (enqueue), `pieza` (armar), `bandeja`
+  (devolver). Fuentes: `bandeja` ("A"), `desarmar`, `pop`, `dequeue`.
+- Códigos que emite el analizador: SINTAXIS, METODO_INEXISTENTE,
+  EXTRACCION_SIN_DESTINO, OPERACION_NO_PERMITIDA (en ese orden de
+  prioridad). El resto de códigos son del simulador.
+- Decisiones tomadas (no estaban en mecánicas):
+  - Combinaciones fuera de la tabla son SINTAXIS: `armar("A")`,
+    `armar(desarmar(X))`, `devolver("A")`, `pila.push(pila.pop())`,
+    `cola.enqueue(cola.dequeue())`.
+  - `desarmar(X)` suelto es EXTRACCION_SIN_DESTINO, igual que `pila.pop()`.
+  - Cualquier método desconocido de pila/cola (p. ej. `pila.peek()`) es
+    METODO_INEXISTENTE; una función u objeto desconocido es SINTAXIS.
+  - Se aceptan comillas simples y dobles y espacios entre tokens; una línea
+    con sangría es SINTAXIS (como en Python).
+  - Una transferencia exige ambas operaciones (p. ej. `enqueue` y `pop`).
+  - Que la pieza de `desarmar(X)` exista se comprueba en el simulador; falta
+    definir qué código usar si no existe.

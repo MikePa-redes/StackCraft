@@ -132,3 +132,43 @@ export interface EstadoPartida {
   /** Estado de cada pieza por id. */
   piezas: Record<string, EstadoPieza>;
 }
+
+// ---------------------------------------------------------------------------
+// Código del jugador
+
+/** De dónde sale el elemento que mueve una instrucción. */
+export type Fuente =
+  | { tipo: 'bandeja'; elemento: string } // "A"
+  | { tipo: 'desarmar'; pieza: string } // desarmar(PIEZA_02)
+  | { tipo: 'pop' } // pila.pop()
+  | { tipo: 'dequeue' }; // cola.dequeue()
+
+/** A dónde va el elemento: pila.push, cola.enqueue, armar, devolver. */
+export type Destino = 'pila' | 'cola' | 'pieza' | 'bandeja';
+
+export interface Instruccion {
+  /** Número de línea (1 = primera). */
+  linea: number;
+  destino: Destino;
+  fuente: Fuente;
+}
+
+export type CodigoError =
+  | 'SINTAXIS'
+  | 'OPERACION_NO_PERMITIDA'
+  | 'METODO_INEXISTENTE'
+  | 'ELEMENTO_NO_DISPONIBLE'
+  | 'ESTRUCTURA_VACIA'
+  | 'EXTRACCION_SIN_DESTINO'
+  | 'PIEZA_FIJA'
+  | 'PIEZA_SIN_MOVIBLES'
+  | 'PIEZA_COMPLETA'
+  | 'NO_ENCAJA'
+  | 'LIMITE_OPERACIONES';
+
+export interface ErrorCodigo {
+  linea: number;
+  codigo: CodigoError;
+  /** Explicación breve para el jugador. */
+  mensaje: string;
+}
