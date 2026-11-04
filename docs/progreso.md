@@ -8,7 +8,7 @@
 - [x] Fase 3: simulador
 - [x] Fase 4: validador y verificador de niveles
 - [x] Fase 5: reducer de partida
-- [ ] Fase 6: interfaz estática
+- [x] Fase 6: interfaz estática
 - [ ] Fase 7: panel de código y ejecución
 - [ ] Fase 8: colocación, pistas, resultados y guardado
 - [ ] Fase 9: cierre del MVP
@@ -148,3 +148,34 @@
   colocar, deshacer y verPista (las estrellas quedan fijas).
 - Pausa solo detiene el cronómetro; no bloquea las demás acciones (la UI
   tapa el tablero con el menú). Reiniciar = `crearPartida(nivel)`.
+
+### Fase 6 (2026-11-04)
+
+- `App.tsx` carga N05 con `cargarNivel` y crea la partida con
+  `useReducer(reducirPartida, nivel, crearPartida)`; aún no despacha nada.
+- Distribución en grid: barra arriba; columna izquierda con piezas y
+  bandeja; matriz al centro; estructuras a la derecha; código abajo y
+  avatar a su derecha (mecánicas §3).
+- `componentes/Figuras.tsx`: primitivas SVG en unidades de celda
+  (`Bloque`, `FiguraElemento`, `FiguraPieza`, `Lienzo`, `cajaDe`). El
+  tamaño en pantalla sale de `--tam-celda-matriz|pieza|elemento`.
+- El color del elemento viene del JSON del nivel y se pasa como variable
+  CSS `--relleno`; el borde se deriva con `color-mix` hacia
+  `--color-oscurecer` (`--mezcla-borde`). La letra va en la celda de origen.
+- Núcleo gris (`--color-nucleo`, aclarado a `#9a9dab` para no confundirse
+  con elementos oscuros); verde de éxito si la pieza está fija o colocada.
+  En el panel, los anclajes libres se ven punteados con su número; en la
+  matriz no.
+- Matriz: celdas `vacia` como silueta punteada; las de referencia en
+  `--color-referencia`, sin letra; `fuera` no se dibuja.
+- Pila y cola se muestran solo si el nivel usa sus operaciones (N05 solo
+  tiene pila). Pila: `column-reverse`, fondo abajo. Cola: frente a la
+  izquierda.
+- Panel de código: resaltado con `tokenizar` del motor; huecos `lista`
+  como `<select>` y `texto` como `<input>`, deshabilitados. Si la pieza
+  seleccionada no es trabajable se muestra un aviso en lugar de plantilla.
+- Avatar: rectángulo punteado "Avatar" + globo con el texto de
+  `nivel.dialogos.inicio` desde `dialogos.es.json` (se agregaron
+  `intro_N05` y `exito_generico`).
+- Estilos: `tokens.css` (variables nuevas de color, medidas y trazos),
+  `juego.css` (distribución, paneles, SVG) y `codigo.css` (código y avatar).

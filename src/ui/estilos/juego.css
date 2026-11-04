@@ -1,0 +1,217 @@
+/* Pantalla de juego: distribución de las siete áreas, paneles y figuras SVG. */
+.juego {
+  display: grid;
+  grid-template-columns: var(--ancho-lateral) 1fr var(--ancho-derecho);
+  grid-template-rows: var(--alto-barra) minmax(0, 1fr) var(--alto-codigo);
+  grid-template-areas:
+    'barra barra barra'
+    'lateral matriz estructuras'
+    'codigo codigo avatar';
+  gap: var(--espacio-chico);
+  height: 100vh;
+  min-height: var(--alto-minimo);
+  padding: var(--espacio-chico);
+}
+
+.area {
+  min-height: 0;
+  padding: var(--espacio-chico) var(--espacio);
+  border: var(--borde) solid var(--color-borde);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+}
+
+.area__titulo {
+  margin: 0 0 var(--espacio-chico);
+  color: var(--color-texto-secundario);
+  font-size: var(--texto-titulo);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.area__titulo code {
+  margin-left: var(--espacio-chico);
+  font-family: var(--fuente-codigo);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--color-acento);
+}
+
+.vacio {
+  color: var(--color-texto-secundario);
+  font-size: var(--texto-pequeno);
+  font-style: italic;
+}
+
+/* ---- Botones e insignias ---- */
+.boton {
+  padding: var(--espacio-chico) var(--espacio);
+  border: var(--borde) solid var(--color-acento);
+  border-radius: var(--radio);
+  background: var(--color-acento);
+  color: var(--color-superficie);
+  font: inherit;
+  font-size: var(--texto-pequeno);
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity var(--transicion-duracion) var(--transicion-curva);
+}
+
+.boton--secundario {
+  background: var(--color-superficie);
+  color: var(--color-acento);
+}
+
+.boton:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.insignia,
+.estado {
+  padding: var(--espacio-micro) var(--espacio-chico);
+  border-radius: var(--radio);
+  font-size: var(--texto-titulo);
+  font-weight: 600;
+}
+
+.insignia {
+  background: var(--color-acento);
+  color: var(--color-superficie);
+}
+
+.estado--en_espera { color: var(--color-espera); background: var(--color-silueta); }
+.estado--incompleta { color: var(--color-texto-secundario); background: var(--color-silueta); }
+.estado--fija,
+.estado--colocada { color: var(--color-superficie); background: var(--color-exito); }
+
+/* ---- 1. Barra superior ---- */
+.barra {
+  grid-area: barra;
+  display: flex;
+  align-items: center;
+  gap: var(--espacio);
+}
+
+.barra__marca { font-weight: 600; font-size: var(--texto-normal); color: var(--color-acento); }
+.barra__nivel { display: flex; align-items: center; gap: var(--espacio-chico); flex: 1; }
+.barra__progreso { display: flex; align-items: center; gap: var(--espacio-chico); font-size: var(--texto-pequeno); }
+.barra__progreso progress { accent-color: var(--color-exito); }
+.barra__tiempo { font-family: var(--fuente-codigo); font-size: var(--texto-normal); }
+
+/* ---- 2 y 3. Columna lateral: piezas y bandeja ---- */
+.juego__lateral {
+  grid-area: lateral;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-chico);
+  min-height: 0;
+}
+
+.piezas { flex: 1; overflow: auto; }
+.piezas__lista { display: flex; flex-direction: column; gap: var(--espacio-chico); margin: 0; padding: 0; list-style: none; }
+
+.tarjeta {
+  display: flex;
+  align-items: center;
+  gap: var(--espacio);
+  padding: var(--espacio-chico);
+  border: var(--borde-grueso) solid var(--color-borde);
+  border-radius: var(--radio);
+}
+
+.tarjeta--seleccionada { border-color: var(--color-acento); box-shadow: var(--sombra); }
+.tarjeta--en_espera { opacity: 0.6; }
+.tarjeta__info { display: flex; flex-direction: column; align-items: flex-start; gap: var(--espacio-mini); }
+.tarjeta__id { font-family: var(--fuente-codigo); font-size: var(--texto-pequeno); }
+
+.bandeja__contenido { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--espacio-chico); min-height: var(--tam-celda-matriz); }
+
+/* ---- 4. Estructuras ---- */
+.estructuras { grid-area: estructuras; display: flex; flex-direction: column; gap: var(--espacio); overflow: auto; }
+.estructura { display: flex; flex-direction: column; align-items: center; }
+.estructura .area__titulo { align-self: flex-start; }
+.estructura--pila { flex: 1; min-height: 0; }
+
+.estructura__marca {
+  color: var(--color-texto-secundario);
+  font-size: var(--texto-titulo);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.pila {
+  display: flex;
+  flex: 1;
+  flex-direction: column-reverse;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--espacio-mini);
+  width: calc(var(--tam-celda-matriz) * 2);
+  min-height: calc(var(--tam-celda-matriz) * 2);
+  margin: var(--espacio-mini) 0;
+  padding: var(--espacio-chico);
+  border: var(--borde-grueso) solid var(--color-silueta-borde);
+  border-top: none;
+  border-radius: 0 0 var(--radio) var(--radio);
+  background: var(--color-silueta);
+}
+
+.cola { display: flex; align-items: center; gap: var(--espacio-chico); width: 100%; }
+
+.cola__carril {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--espacio-mini);
+  min-height: calc(var(--tam-celda-matriz) * 1.2);
+  padding: var(--espacio-chico);
+  border-block: var(--borde-grueso) solid var(--color-silueta-borde);
+  background: var(--color-silueta);
+}
+
+/* ---- 5. Matriz ---- */
+.matriz { grid-area: matriz; display: flex; flex-direction: column; }
+.matriz__tablero { display: grid; flex: 1; place-items: center; min-height: 0; }
+
+/* ---- Figuras SVG (unidades de celda) ---- */
+.lienzo { display: block; overflow: visible; flex-shrink: 0; }
+.lienzo--matriz { width: calc(var(--tam-celda-matriz) * var(--celdas-x)); height: calc(var(--tam-celda-matriz) * var(--celdas-y)); }
+.lienzo--pieza { width: calc(var(--tam-celda-pieza) * var(--celdas-x)); height: calc(var(--tam-celda-pieza) * var(--celdas-y)); }
+.lienzo--elemento { width: calc(var(--tam-celda-elemento) * var(--celdas-x)); height: calc(var(--tam-celda-elemento) * var(--celdas-y)); }
+
+.bloque { stroke-width: var(--trazo-bloque); }
+.bloque--elemento {
+  fill: var(--relleno);
+  stroke: color-mix(in srgb, var(--relleno), var(--color-oscurecer) var(--mezcla-borde));
+}
+.bloque--nucleo {
+  --relleno: var(--color-nucleo);
+  fill: var(--relleno);
+  stroke: color-mix(in srgb, var(--relleno), var(--color-oscurecer) var(--mezcla-borde));
+}
+.pieza--fija .bloque--nucleo,
+.pieza--colocada .bloque--nucleo { --relleno: var(--color-exito); }
+.bloque--anclaje { fill: none; stroke: var(--color-silueta-borde); stroke-dasharray: 0.12 0.08; }
+.bloque--referencia {
+  --relleno: var(--color-referencia);
+  fill: var(--relleno);
+  stroke: color-mix(in srgb, var(--relleno), var(--color-oscurecer) var(--mezcla-borde));
+}
+.celda--vacia { fill: var(--color-silueta); stroke: var(--color-silueta-borde); stroke-width: var(--trazo-silueta); stroke-dasharray: 0.1 0.06; }
+.celda--fija { fill: var(--color-silueta); stroke: none; }
+
+.bloque__letra {
+  fill: var(--color-letra);
+  stroke: var(--color-sombra-letra);
+  stroke-width: 0.06;
+  paint-order: stroke;
+  font-family: var(--fuente-texto);
+  font-size: var(--letra-bloque);
+  font-weight: 600;
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+.bloque__letra--anclaje { fill: var(--color-texto-secundario); stroke: none; font-weight: 400; }

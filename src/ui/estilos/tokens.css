@@ -11,7 +11,7 @@
   --color-elemento-8: #999999; /* gris */
 
   /* Estados */
-  --color-nucleo: #4a4e69;
+  --color-nucleo: #9a9dab;
   --color-exito: #2a9d8f;
   --color-error: #c1121f;
   --color-espera: #b8860b;
@@ -19,6 +19,27 @@
   --color-superficie: #ffffff;
   --color-texto: #1f2233;
   --color-texto-secundario: #5c6075;
+  --color-borde: #ded8ca;
+  --color-acento: #3d5a80;
+  --color-silueta: #ebe6da;
+  --color-silueta-borde: #b9b19e;
+  --color-referencia: #c4c7d4;
+  --color-letra: #ffffff;
+  --color-sombra-letra: rgb(31 34 51 / 0.55);
+  /* Borde de bloque: su relleno mezclado con este color */
+  --color-oscurecer: #1f2233;
+  --mezcla-borde: 30%;
+
+  /* Panel de código */
+  --color-codigo-fondo: #23263a;
+  --color-codigo-texto: #e6e4ee;
+  --color-codigo-numero: #6f7491;
+  --color-codigo-objeto: #8ecae6;
+  --color-codigo-funcion: #ffc46b;
+  --color-codigo-literal: #9be0b4;
+  --color-codigo-comentario: #8a8fa8;
+  --color-hueco-fondo: #34384f;
+  --color-hueco-borde: #5b6080;
 
   /* Tipografía */
   --fuente-texto: 'Inter', system-ui, sans-serif;
@@ -26,6 +47,9 @@
   --texto-pequeno: 0.875rem;
   --texto-normal: 1rem;
   --texto-grande: 1.75rem;
+  --texto-titulo: 0.75rem;
+  --texto-codigo: 0.95rem;
+  --alto-linea-codigo: 2rem;
 
   /* Forma */
   --radio: 8px;
@@ -37,6 +61,25 @@
 
   /* Medidas */
   --espacio: 16px;
+  --espacio-chico: 8px;
+  --espacio-mini: 4px;
+  --espacio-micro: 2px;
+  --borde: 1px;
+  --borde-grueso: 2px;
+  --alto-barra: 56px;
+  --alto-codigo: 216px;
+  --ancho-lateral: 300px;
+  --ancho-derecho: 320px;
+  --alto-avatar: 112px;
+  --ancho-marcador-avatar: 96px;
+  /* Tamaño en pantalla de una celda según dónde se dibuje */
+  --tam-celda-matriz: 72px;
+  --tam-celda-pieza: 30px;
+  --tam-celda-elemento: 26px;
+  /* Trazos SVG en unidades de celda */
+  --trazo-bloque: 0.07;
+  --trazo-silueta: 0.04;
+  --letra-bloque: 0.5px;
   --ancho-minimo: 1280px;
   --alto-minimo: 720px;
 }
@@ -55,14 +98,4 @@ body {
   color: var(--color-texto);
   font-family: var(--fuente-texto);
   font-size: var(--texto-normal);
-}
-
-.app {
-  padding: var(--espacio);
-}
-
-.app__titulo {
-  margin: 0;
-  font-size: var(--texto-grande);
-  font-weight: 600;
 }
