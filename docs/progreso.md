@@ -5,7 +5,7 @@
 - [x] Fase 0: proyecto base
 - [x] Fase 1: tipos y carga de niveles
 - [x] Fase 2: analizador
-- [ ] Fase 3: simulador
+- [x] Fase 3: simulador
 - [ ] Fase 4: validador y verificador de niveles
 - [ ] Fase 5: reducer de partida
 - [ ] Fase 6: interfaz estática
@@ -72,5 +72,28 @@
   - Se aceptan comillas simples y dobles y espacios entre tokens; una línea
     con sangría es SINTAXIS (como en Python).
   - Una transferencia exige ambas operaciones (p. ej. `enqueue` y `pop`).
-  - Que la pieza de `desarmar(X)` exista se comprueba en el simulador; falta
-    definir qué código usar si no existe.
+  - Que la pieza de `desarmar(X)` exista se comprueba en el simulador
+    (SINTAXIS si no existe; ver Fase 3).
+
+### Fase 3 (2026-11-04)
+
+- `simulador.ts`: `simular(nivel, estado, instrucciones)` trabaja sobre una
+  copia y devuelve `{ ok, eventos, estadoNuevo }` o
+  `{ ok: false, error, linea, eventosHastaError }`. Cada instrucción produce
+  un `Evento { linea, elemento, desde, hacia }` para animar.
+- `estados.ts`: `recalcularEstados` (usado por cargador y simulador) y
+  `piezaActiva`. El simulador lo aplica solo al terminar sin errores; durante
+  la ejecución, "fija" se evalúa con el estado previo.
+- `armar` va a la pieza activa (primera `incompleta` de `ordenPiezas`); si no
+  hay ninguna, PIEZA_COMPLETA.
+- Una pieza `en_espera` sí se puede desarmar (mecánicas §5).
+- `desarmar(X)` con una pieza inexistente (incluidas las de referencia) →
+  SINTAXIS (decidido con el usuario; no se agrega código nuevo).
+- Elemento de la bandeja inexistente o no presente → ELEMENTO_NO_DISPONIBLE.
+- LIMITE_OPERACIONES: se cuentan instrucciones (una por línea ejecutada),
+  máximo 200; la instrucción 201 falla.
+- Pruebas de invariantes: recorrido aleatorio con semilla fija (1000
+  ejecuciones por nivel) que vuelve al estado inicial cuando todas las piezas
+  quedan fijas; comprueba 1, 2, 5, 7 y 10. Pruebas puntuales para 2, 3, 4,
+  7 y 10. `ayudasPrueba.ts` tiene utilidades solo para pruebas.
+- No existe `AGENTS.md`: los invariantes están en CLAUDE.md.

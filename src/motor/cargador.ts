@@ -1,7 +1,7 @@
 // Carga de niveles: valida el JSON y construye el estado inicial de partida.
 
 import { revisarEstructura } from './estructuraNivel';
-import { coincideObjetivo } from './formas';
+import { recalcularEstados } from './estados';
 import { revisarReferencias } from './referenciasNivel';
 import type { Acople, EstadoPartida, EstadoPieza, Nivel, Posicion } from './tipos';
 
@@ -41,25 +41,14 @@ export function cargarNivel(json: unknown): Nivel {
  */
 export function estadoInicial(nivel: Nivel): EstadoPartida {
   const piezas: Record<string, EstadoPieza> = {};
-  let hayActiva = false;
-  for (const id of nivel.ordenPiezas) {
-    const pieza = nivel.piezas.find((p) => p.id === id);
-    if (!pieza) continue;
+  for (const pieza of nivel.piezas) {
     const acoplados: Acople[] = Object.entries(pieza.iniciales)
       .map(([orden, elemento]) => ({ anclaje: Number(orden), elemento }))
       .sort((a, b) => a.anclaje - b.anclaje);
-    let estado: EstadoPieza['estado'];
-    if (coincideObjetivo(nivel, pieza, acoplados)) {
-      estado = 'fija';
-    } else if (!hayActiva) {
-      estado = 'incompleta';
-      hayActiva = true;
-    } else {
-      estado = 'en_espera';
-    }
-    piezas[id] = { estado, acoplados };
+    // Estado provisional: recalcularEstados decide el real.
+    piezas[pieza.id] = { estado: 'incompleta', acoplados };
   }
-  return { bandeja: [...nivel.bandeja], pila: [], cola: [], piezas };
+  return { bandeja: [...nivel.bandeja], pila: [], cola: [], piezas: recalcularEstados(nivel, piezas) };
 }
 
 /** Carga un nivel desde JSON y devuelve el nivel tipado y su estado inicial. */

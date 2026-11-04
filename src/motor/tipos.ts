@@ -172,3 +172,11 @@ export interface ErrorCodigo {
   /** Explicación breve para el jugador. */
   mensaje: string;
 }
+
+/** Movimiento de un elemento producido por una instrucción (para animar). */
+export interface Evento {
+  linea: number;
+  elemento: string;
+  desde: Posicion;
+  hacia: Posicion;
+}
