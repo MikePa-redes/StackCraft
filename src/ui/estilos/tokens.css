@@ -1,0 +1,68 @@
+/* Variables de diseño de Stack-Craft. Todo color y medida sale de aquí. */
+:root {
+  /* Elementos: paleta Okabe-Ito + gris, apta para daltonismo */
+  --color-elemento-1: #e69f00; /* naranja */
+  --color-elemento-2: #56b4e9; /* azul cielo */
+  --color-elemento-3: #009e73; /* verde azulado */
+  --color-elemento-4: #f0e442; /* amarillo */
+  --color-elemento-5: #0072b2; /* azul */
+  --color-elemento-6: #d55e00; /* bermellón */
+  --color-elemento-7: #cc79a7; /* púrpura rojizo */
+  --color-elemento-8: #999999; /* gris */
+
+  /* Estados */
+  --color-nucleo: #4a4e69;
+  --color-exito: #2a9d8f;
+  --color-error: #c1121f;
+  --color-espera: #b8860b;
+  --color-fondo: #f4f1ea;
+  --color-superficie: #ffffff;
+  --color-texto: #1f2233;
+  --color-texto-secundario: #5c6075;
+
+  /* Tipografía */
+  --fuente-texto: 'Inter', system-ui, sans-serif;
+  --fuente-codigo: 'JetBrains Mono', ui-monospace, monospace;
+  --texto-pequeno: 0.875rem;
+  --texto-normal: 1rem;
+  --texto-grande: 1.75rem;
+
+  /* Forma */
+  --radio: 8px;
+  --sombra: 0 2px 8px rgb(31 34 51 / 0.15);
+
+  /* Movimiento */
+  --transicion-duracion: 250ms;
+  --transicion-curva: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Medidas */
+  --espacio: 16px;
+  --ancho-minimo: 1280px;
+  --alto-minimo: 720px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: var(--ancho-minimo);
+  min-height: var(--alto-minimo);
+  background: var(--color-fondo);
+  color: var(--color-texto);
+  font-family: var(--fuente-texto);
+  font-size: var(--texto-normal);
+}
+
+.app {
+  padding: var(--espacio);
+}
+
+.app__titulo {
+  margin: 0;
+  font-size: var(--texto-grande);
+  font-weight: 600;
+}
