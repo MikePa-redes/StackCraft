@@ -7,7 +7,7 @@
 - [x] Fase 2: analizador
 - [x] Fase 3: simulador
 - [x] Fase 4: validador y verificador de niveles
-- [ ] Fase 5: reducer de partida
+- [x] Fase 5: reducer de partida
 - [ ] Fase 6: interfaz estática
 - [ ] Fase 7: panel de código y ejecución
 - [ ] Fase 8: colocación, pistas, resultados y guardado
@@ -121,3 +121,30 @@
   `scripts/verificar-niveles.ts` con `runnerImport` de Vite (TS, JSON e
   `import.meta.glob` sin dependencias nuevas). Sale con código 1 si algún
   nivel falla.
+
+### Fase 5 (2026-11-04)
+
+- `partida.ts`: `crearPartida(nivel)` y `reducirPartida(partida, accion)`.
+  `Partida` guarda `nivel`, `juego` (EstadoPartida), `seleccionada`,
+  `anterior` (un solo estado para Deshacer), `ultimaEjecucion`,
+  `ultimaColocacion`, `pistasVistas`, `pistaMostrada`, `tiempoMs`, `pausado`
+  y `completado`. Selectores: `estrellas`, `puedeEditar`, `puedeDeshacer`,
+  `siguientePista`.
+- Acciones: seleccionar, ejecutar `{ codigo }` (texto ya rellenado; el panel
+  de la Fase 7 sustituye los huecos), deshacer, colocar `{ pieza, x, y }`,
+  verPista `{ id? }`, cerrarPista, pausar, reanudar, reiniciar,
+  tick `{ ms }` (delta; el reducer no lee el reloj).
+- Al iniciar se selecciona la pieza activa. Se puede seleccionar cualquier
+  pieza; ejecutar solo actúa si la seleccionada es la activa (las piezas en
+  espera, fijas o colocadas no cargan plantilla). Tras dejar fija una pieza
+  la selección no salta sola a la siguiente.
+- Deshacer: `anterior` se fija con cada ejecución sin errores; una ejecución
+  con error no lo toca. Se borra al deshacer (solo una vez), al colocar una
+  pieza y al reiniciar.
+- Pistas: sin `id` muestra la siguiente no vista en el orden de
+  `nivel.pistas` (la confirmación la pide la UI); con `id` vuelve a mostrar
+  una ya vista sin costo. `estrellas = max(0, 3 - pistasVistas)`.
+- Al completar la matriz: el cronómetro se detiene y se ignoran ejecutar,
+  colocar, deshacer y verPista (las estrellas quedan fijas).
+- Pausa solo detiene el cronómetro; no bloquea las demás acciones (la UI
+  tapa el tablero con el menú). Reiniciar = `crearPartida(nivel)`.
