@@ -1,0 +1,73 @@
+/* Arrastre de piezas, vista previa en la matriz, diálogos y resultados. */
+
+/* Arrastre */
+.tarjeta--arrastrable { cursor: grab; touch-action: none; }
+.tarjeta--arrastrando { opacity: var(--opacidad-origen-arrastre); }
+
+.arrastrada {
+  position: fixed;
+  z-index: var(--capa-arrastre);
+  opacity: var(--opacidad-arrastre);
+  pointer-events: none;
+  filter: drop-shadow(var(--sombra));
+}
+.arrastrada .lienzo { width: 100%; height: 100%; }
+.arrastrada--volviendo {
+  transition-property: left, top, width, height, opacity;
+  transition-duration: var(--transicion-duracion);
+  transition-timing-function: var(--transicion-curva);
+}
+
+/* Vista previa: dónde caería la pieza */
+.previa { pointer-events: none; }
+.bloque--previa { fill-opacity: 0.25; stroke-width: var(--trazo-bloque); stroke-dasharray: 0.12 0.08; }
+.previa--valida .bloque--previa { fill: var(--color-exito); stroke: var(--color-exito); }
+.previa--invalida .bloque--previa { fill: var(--color-error); stroke: var(--color-error); }
+
+/* Barra superior */
+.barra__estrellas { color: var(--color-estrella); font-weight: 600; }
+.barra__tiempo--pausado { color: var(--color-texto-secundario); }
+
+/* Globo del avatar con botón de cierre */
+.avatar__globo { display: flex; align-items: flex-start; gap: var(--espacio-chico); }
+.avatar__globo > span { flex: 1; }
+.avatar__cerrar { flex-shrink: 0; }
+
+/* Diálogos */
+.capa {
+  position: fixed;
+  inset: 0;
+  z-index: var(--capa-dialogo);
+  display: grid;
+  place-items: center;
+  background: var(--color-velo);
+}
+
+.dialogo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espacio-chico);
+  width: var(--ancho-dialogo);
+  padding: var(--espacio);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  box-shadow: var(--sombra);
+}
+.dialogo p { margin: 0; line-height: 1.45; }
+.dialogo__titulo { margin: 0; font-size: var(--texto-normal); }
+.dialogo__nota { color: var(--color-texto-secundario); font-size: var(--texto-pequeno); }
+.dialogo__vistas { display: flex; flex-wrap: wrap; align-items: center; gap: var(--espacio-chico); }
+.dialogo__acciones { display: flex; justify-content: flex-end; gap: var(--espacio-chico); margin-top: var(--espacio-chico); }
+
+/* Resultados */
+.resultados { align-items: center; text-align: center; }
+.resultados__titulo { margin: 0; font-size: var(--texto-grande); color: var(--color-exito); }
+.resultados__nivel { color: var(--color-texto-secundario); }
+.resultados__estrellas { font-size: var(--texto-estrellas); letter-spacing: var(--espacio-mini); }
+.estrella { color: var(--color-estrella-vacia); }
+.estrella--ganada { color: var(--color-estrella); }
+.resultados__datos { display: grid; grid-template-columns: 1fr 1fr; gap: var(--espacio-chico); width: 100%; margin: 0; }
+.resultados__datos div { padding: var(--espacio-chico); border-radius: var(--radio); background: var(--color-fondo); }
+.resultados__datos dt { color: var(--color-texto-secundario); font-size: var(--texto-pequeno); }
+.resultados__datos dd { margin: 0; font-family: var(--fuente-codigo); font-size: var(--texto-normal); }
+.resultados .dialogo__acciones { justify-content: center; }

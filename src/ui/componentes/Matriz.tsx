@@ -1,8 +1,16 @@
 import type { EstadoPartida, Nivel } from '../../motor/tipos';
+import type { VistaPrevia } from '../useArrastre';
 import { Bloque, FiguraPieza, Lienzo } from './Figuras';
 
-/** Área 5: silueta de la matriz, piezas de referencia y piezas colocadas. */
-export function Matriz({ nivel, juego }: { nivel: Nivel; juego: EstadoPartida }) {
+interface Props {
+  nivel: Nivel;
+  juego: EstadoPartida;
+  /** Celdas donde caería la pieza arrastrada, válidas o no. */
+  vistaPrevia?: VistaPrevia | null;
+}
+
+/** Área 5: silueta de la matriz, piezas de referencia, colocadas y vista previa. */
+export function Matriz({ nivel, juego, vistaPrevia }: Props) {
   const { ancho, alto, celdas, piezasReferencia } = nivel.matriz;
   return (
     <section className="area matriz" aria-label="Matriz">
@@ -37,6 +45,13 @@ export function Matriz({ nivel, juego }: { nivel: Nivel; juego: EstadoPartida })
               />
             );
           })}
+          {vistaPrevia && (
+            <g className={`previa previa--${vistaPrevia.valida ? 'valida' : 'invalida'}`}>
+              {vistaPrevia.celdas.map(([x, y]) => (
+                <Bloque key={`${x},${y}`} x={x} y={y} clase="bloque--previa" />
+              ))}
+            </g>
+          )}
         </Lienzo>
       </div>
     </section>

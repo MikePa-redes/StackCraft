@@ -24,6 +24,9 @@
   --color-silueta: #ebe6da;
   --color-silueta-borde: #b9b19e;
   --color-referencia: #c4c7d4;
+  --color-velo: rgb(31 34 51 / 0.45);
+  --color-estrella: #e9a400;
+  --color-estrella-vacia: #d8d2c3;
   --color-letra: #ffffff;
   --color-sombra-letra: rgb(31 34 51 / 0.55);
   /* Borde de bloque: su relleno mezclado con este color */
@@ -62,6 +65,10 @@
   --transicion-duracion: 250ms;
   --transicion-movimiento: 200ms;
   --capa-volador: 50;
+  --capa-arrastre: 60;
+  --capa-dialogo: 70;
+  --opacidad-arrastre: 0.85;
+  --opacidad-origen-arrastre: 0.4;
   --transicion-curva: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* Medidas */
@@ -85,6 +92,8 @@
   --trazo-bloque: 0.07;
   --trazo-silueta: 0.04;
   --letra-bloque: 0.5px;
+  --ancho-dialogo: 440px;
+  --texto-estrellas: 2.5rem;
   --ancho-minimo: 1280px;
   --alto-minimo: 720px;
 }

@@ -10,7 +10,7 @@
 - [x] Fase 5: reducer de partida
 - [x] Fase 6: interfaz estática
 - [x] Fase 7: panel de código y ejecución
-- [ ] Fase 8: colocación, pistas, resultados y guardado
+- [x] Fase 8: colocación, pistas, resultados y guardado
 - [ ] Fase 9: cierre del MVP
 
 ## Decisiones
@@ -213,3 +213,33 @@
   Enter).
 - Pendiente para más adelante: en paso a paso no se marca la línea
   siguiente antes del primer clic.
+
+### Fase 8 (2026-11-05)
+
+- Motor: `Partida.estadisticas` (operaciones de ejecuciones correctas,
+  ejecuciones, fallidas, errores por código, colocaciones rechazadas) y el
+  selector `motivoColocacion` (vista previa del arrastre). Nuevo
+  `resultados.ts` (con pruebas en `estadisticas.test.ts`): `resumirPartida`,
+  `esMejor` (más estrellas; a igualdad, menor tiempo), `actualizarMejores`,
+  `agregarRegistro` y `esTablaMejores`.
+- Arrastre (`useArrastre.ts`, `PiezaArrastrada.tsx`): eventos de puntero
+  sobre las tarjetas de piezas fijas; umbral de 4 px para distinguir clic de
+  arrastre. Vista previa en la matriz ajustada a celdas (verde válida, roja
+  no). Rechazo: la copia vuelve al panel con transición y el avatar da el
+  motivo (`colocacion_*`). Soltar fuera de la matriz solo cancela.
+- Pistas: el botón de la barra abre `DialogoPistas` (confirmación con las
+  estrellas antes/después; releer una vista es gratis). La pista se muestra
+  en el avatar con botón Cerrar.
+- Cronómetro (`useCronometro.ts`): `tick` cada 250 ms; pausa con
+  `visibilitychange`/`blur` y reanuda solo si la pausa fue por foco.
+- Resultados (`Resultados.tsx`): estrellas, tiempo, pistas, operaciones,
+  fallidas y récord. "Repetir nivel" remonta el juego (`key`), sin residuos.
+  "Continuar" solo cierra la capa hasta que exista el menú (Fase 9).
+- Guardado (`guardado.ts`): `stack-craft:mejores` y `stack-craft:registro`
+  (máx. 200 entradas), todo con try/catch; se guarda una vez al completar.
+- Bug corregido: el efecto de reproducción de `useEjecucion` no tenía
+  dependencias y los ticks del cronómetro reiniciaban su temporizador,
+  congelando la ejecución. Ahora depende solo de `rep`.
+- Verificado en navegador (1280×720): pistas, arrastre válido/inválido,
+  resultados, guardado, reinicio y pausa por blur. Sin prueba automática de UI
+  (Vitest solo cubre el motor).

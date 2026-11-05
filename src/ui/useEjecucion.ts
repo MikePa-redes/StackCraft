@@ -84,7 +84,9 @@ export function useEjecucion(partida: Partida, dispatch: Dispatch<Accion>) {
     if (rep.modo !== 'auto' && !cierre) return;
     const t = setTimeout(() => avanzar(rep), rep.indice === 0 ? 0 : PASO_MS);
     return () => clearTimeout(t);
-  });
+    // Solo depende de `rep`: los ticks del cronómetro re-renderizan cada
+    // 250 ms y no deben reiniciar este temporizador.
+  }, [rep]);
 
   // Tras pintar el nuevo estado intermedio, el elemento vuela a su destino.
   useLayoutEffect(() => {

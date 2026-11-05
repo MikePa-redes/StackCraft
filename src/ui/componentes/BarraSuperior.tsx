@@ -1,14 +1,16 @@
-import type { Partida } from '../../motor/partida';
+import { estrellas, type Partida } from '../../motor/partida';
+import { formatoTiempo } from '../formato';
 
 const ETAPAS: Record<string, string> = { stack: 'Stack', queue: 'Queue', mixta: 'Mixta' };
 
-function formatoTiempo(ms: number): string {
-  const s = Math.floor(ms / 1000);
-  return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+/** Área 1: nivel, progreso, cronómetro, pistas y configuración. */
+interface Props {
+  partida: Partida;
+  /** Sin función, el botón de pistas queda deshabilitado. */
+  alPedirPista?: () => void;
 }
 
-/** Área 1: nivel, progreso, cronómetro, pistas y configuración. */
-export function BarraSuperior({ partida }: { partida: Partida }) {
+export function BarraSuperior({ partida, alPedirPista }: Props) {
   const { nivel, juego } = partida;
   const total = nivel.piezas.length;
   const colocadas = nivel.piezas.filter((p) => juego.piezas[p.id]?.estado === 'colocada').length;
@@ -26,10 +28,13 @@ export function BarraSuperior({ partida }: { partida: Partida }) {
           {colocadas}/{total} piezas
         </span>
       </div>
-      <span className="barra__tiempo" aria-label="Tiempo">
+      <span className="barra__estrellas" aria-label={`${estrellas(partida)} estrellas`}>
+        ★ {estrellas(partida)}
+      </span>
+      <span className={`barra__tiempo${partida.pausado ? ' barra__tiempo--pausado' : ''}`} aria-label="Tiempo">
         {formatoTiempo(partida.tiempoMs)}
       </span>
-      <button className="boton" type="button" disabled>
+      <button className="boton" type="button" disabled={!alPedirPista || nivel.pistas.length === 0} onClick={alPedirPista}>
         Pista
       </button>
       <button className="boton boton--secundario" type="button" disabled>

@@ -1,3 +1,4 @@
+import type { PointerEvent as EventoPuntero } from 'react';
 import type { Partida } from '../../motor/partida';
 import type { EstadoVisualPieza } from '../../motor/tipos';
 import { cajaDe, celdasVisibles, FiguraPieza, Lienzo } from './Figuras';
@@ -14,9 +15,17 @@ interface Props {
   partida: Partida;
   /** Sin función, las tarjetas no se pueden seleccionar (p. ej. durante una animación). */
   alSeleccionar?: (id: string) => void;
+  /** Manejadores de arrastre para las piezas fijas (sin ellos no se arrastra). */
+  arrastre?: {
+    pieza: string | null;
+    alPresionar: (id: string, e: EventoPuntero<HTMLElement>) => void;
+    alMover: (e: EventoPuntero<HTMLElement>) => void;
+    alSoltar: (e: EventoPuntero<HTMLElement>) => void;
+    alCancelar: () => void;
+  };
 }
 
-export function PanelPiezas({ partida, alSeleccionar }: Props) {
+export function PanelPiezas({ partida, alSeleccionar, arrastre }: Props) {
   const { nivel, juego, seleccionada } = partida;
   return (
     <section className="area piezas" aria-label="Piezas">
@@ -27,7 +36,10 @@ export function PanelPiezas({ partida, alSeleccionar }: Props) {
           const ep = juego.piezas[id];
           if (!pieza || !ep) return null;
           const caja = cajaDe(celdasVisibles(nivel, pieza, ep.acoplados));
-          const clase = `tarjeta tarjeta--${ep.estado}${seleccionada === id ? ' tarjeta--seleccionada' : ''}`;
+          const arrastrable = !!arrastre && ep.estado === 'fija';
+          const clase =
+            `tarjeta tarjeta--${ep.estado}${seleccionada === id ? ' tarjeta--seleccionada' : ''}` +
+            `${arrastrable ? ' tarjeta--arrastrable' : ''}${arrastre?.pieza === id ? ' tarjeta--arrastrando' : ''}`;
           return (
             <li
               key={id}
@@ -38,6 +50,11 @@ export function PanelPiezas({ partida, alSeleccionar }: Props) {
               aria-disabled={!alSeleccionar}
               onClick={() => alSeleccionar?.(id)}
               onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && alSeleccionar?.(id)}
+              onPointerDown={arrastrable ? (e) => arrastre.alPresionar(id, e) : undefined}
+              onPointerMove={arrastrable ? arrastre.alMover : undefined}
+              onPointerUp={arrastrable ? arrastre.alSoltar : undefined}
+              onPointerCancel={arrastrable ? arrastre.alCancelar : undefined}
+              title={arrastrable ? 'Arrastra la pieza a la matriz' : undefined}
             >
               <Lienzo caja={caja} clase="lienzo--pieza" etiqueta={`Pieza ${id}`}>
                 <FiguraPieza nivel={nivel} pieza={pieza} acoplados={ep.acoplados} estado={ep.estado} anclajesLibres />

@@ -2,7 +2,7 @@
   "intro_N05": "Algunas piezas traen elementos que no les corresponden. Desármalas usando la pila y vuelve a armarlas para que encajen en la matriz.",
   "exito_generico": "¡Muy bien! Completaste la matriz.",
   "ejecucion_ok": "Listo. Si la pieza aún no coincide con su silueta, puedes desarmarla y volver a intentarlo.",
-  "pieza_fija": "¡La pieza quedó fija! Ya no se puede desarmar. Pronto podrás llevarla a la matriz.",
+  "pieza_fija": "¡La pieza quedó fija! Ya no se puede desarmar. Arrástrala desde el panel hasta su lugar en la matriz.",
   "error_linea": "Línea {linea}:",
   "error_SINTAXIS": "Esta línea no sigue la forma permitida. Revisa paréntesis, comillas y nombres.",
   "error_OPERACION_NO_PERMITIDA": "Esa operación todavía no está disponible en este nivel.",
@@ -15,5 +15,11 @@
   "error_PIEZA_COMPLETA": "La pieza ya no tiene anclajes libres.",
   "error_NO_ENCAJA": "El elemento choca con el núcleo o con otro elemento en ese anclaje.",
   "error_LIMITE_OPERACIONES": "Se superó el máximo de operaciones en una sola ejecución.",
-  "error_restaurado": "Nada cambió: todo volvió a como estaba antes de ejecutar."
+  "error_restaurado": "Nada cambió: todo volvió a como estaba antes de ejecutar.",
+  "pista": "Pista:",
+  "colocacion_ok": "¡Encajó! La pieza quedó colocada en la matriz.",
+  "colocacion_NO_FIJA": "Solo se pueden colocar piezas fijas. La pieza regresó al panel.",
+  "colocacion_HUECO_INVALIDO": "La pieza no encaja ahí: su forma no coincide con ese hueco. Regresó al panel.",
+  "colocacion_OCUPADO": "Ese lugar ya está ocupado. La pieza regresó al panel.",
+  "colocacion_PIEZA_INEXISTENTE": "Esa pieza no existe en este nivel."
 }

@@ -6,7 +6,7 @@ import { analizar } from './analizador';
 import { estadoInicial } from './cargador';
 import { piezaActiva } from './estados';
 import { simular } from './simulador';
-import type { ErrorCodigo, EstadoPartida, Evento, Nivel } from './tipos';
+import type { CodigoError, ErrorCodigo, EstadoPartida, Evento, Nivel } from './tipos';
 import { colocarPieza, nivelCompleto, type MotivoColocacion } from './validador';
 
 /** Resultado de la última ejecución, para que la UI lo anime o explique. */
@@ -15,6 +15,17 @@ export type ResultadoEjecucion =
   | { ok: false; errores: ErrorCodigo[]; eventosHastaError: Evento[] };
 
 export type ResultadoColocar = { ok: true; pieza: string } | { ok: false; pieza: string; motivo: MotivoColocacion };
+
+/** Estadísticas del intento para resultados y registro de aprendizaje (§14). */
+export interface Estadisticas {
+  /** Operaciones de las ejecuciones sin errores (una por instrucción). */
+  operaciones: number;
+  ejecuciones: number;
+  fallidas: number;
+  /** Veces que apareció cada código de error. */
+  errores: Partial<Record<CodigoError, number>>;
+  colocacionesRechazadas: number;
+}
 
 export interface Partida {
   nivel: Nivel;
@@ -33,6 +44,7 @@ export interface Partida {
   tiempoMs: number;
   pausado: boolean;
   completado: boolean;
+  estadisticas: Estadisticas;
 }
 
 export type Accion =
@@ -62,6 +74,7 @@ export function crearPartida(nivel: Nivel): Partida {
     tiempoMs: 0,
     pausado: false,
     completado: false,
+    estadisticas: { operaciones: 0, ejecuciones: 0, fallidas: 0, errores: {}, colocacionesRechazadas: 0 },
   };
 }
 
@@ -84,18 +97,48 @@ export function siguientePista(p: Partida): string | undefined {
   return p.nivel.pistas.find((pi) => !p.pistasVistas.includes(pi.id))?.id;
 }
 
+/**
+ * Motivo por el que no se podría colocar la pieza con su origen en (x, y),
+ * o null si se puede. Solo consulta: sirve para la vista previa del arrastre.
+ */
+export function motivoColocacion(p: Partida, pieza: string, x: number, y: number): MotivoColocacion | null {
+  const r = colocarPieza(p.nivel, p.juego, pieza, x, y);
+  return r.ok ? null : r.motivo;
+}
+
+function conFallo(e: Estadisticas, errores: ErrorCodigo[]): Estadisticas {
+  const conteo = { ...e.errores };
+  for (const { codigo } of errores) conteo[codigo] = (conteo[codigo] ?? 0) + 1;
+  return { ...e, ejecuciones: e.ejecuciones + 1, fallidas: e.fallidas + 1, errores: conteo };
+}
+
 function ejecutar(p: Partida, codigo: string): Partida {
   if (!puedeEditar(p)) return p;
   const analisis = analizar(codigo, p.nivel.operaciones);
   if (!analisis.ok) {
-    return { ...p, ultimaEjecucion: { ok: false, errores: analisis.errores, eventosHastaError: [] } };
+    return {
+      ...p,
+      ultimaEjecucion: { ok: false, errores: analisis.errores, eventosHastaError: [] },
+      estadisticas: conFallo(p.estadisticas, analisis.errores),
+    };
   }
   const r = simular(p.nivel, p.juego, analisis.instrucciones);
   if (!r.ok) {
     // Una ejecución con error no cambia el estado ni el alcance de Deshacer.
-    return { ...p, ultimaEjecucion: { ok: false, errores: [r.error], eventosHastaError: r.eventosHastaError } };
+    return {
+      ...p,
+      ultimaEjecucion: { ok: false, errores: [r.error], eventosHastaError: r.eventosHastaError },
+      estadisticas: conFallo(p.estadisticas, [r.error]),
+    };
   }
-  return { ...p, juego: r.estadoNuevo, anterior: p.juego, ultimaEjecucion: { ok: true, eventos: r.eventos } };
+  const e = p.estadisticas;
+  return {
+    ...p,
+    juego: r.estadoNuevo,
+    anterior: p.juego,
+    ultimaEjecucion: { ok: true, eventos: r.eventos },
+    estadisticas: { ...e, ejecuciones: e.ejecuciones + 1, operaciones: e.operaciones + r.eventos.length },
+  };
 }
 
 function deshacer(p: Partida): Partida {
@@ -106,7 +149,14 @@ function deshacer(p: Partida): Partida {
 function colocar(p: Partida, pieza: string, x: number, y: number): Partida {
   if (p.completado) return p;
   const r = colocarPieza(p.nivel, p.juego, pieza, x, y);
-  if (!r.ok) return { ...p, ultimaColocacion: { ok: false, pieza, motivo: r.motivo } };
+  if (!r.ok) {
+    const e = p.estadisticas;
+    return {
+      ...p,
+      ultimaColocacion: { ok: false, pieza, motivo: r.motivo },
+      estadisticas: { ...e, colocacionesRechazadas: e.colocacionesRechazadas + 1 },
+    };
+  }
   return {
     ...p,
     juego: r.estadoNuevo,
