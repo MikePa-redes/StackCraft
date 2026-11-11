@@ -1,0 +1,89 @@
+{
+  "id": "N02",
+  "etapa": "stack",
+  "titulo": "El último en entrar",
+  "operaciones": ["push", "pop", "armar"],
+  "desarmado": "lifo",
+  "ordenPiezas": ["PIEZA_01", "PIEZA_02"],
+  "elementos": {
+    "A": { "color": "#E07A5F", "forma": [[0, 0]] },
+    "B": { "color": "#3D405B", "forma": [[0, 0], [1, 0], [2, 0]] },
+    "C": { "color": "#81B29A", "forma": [[0, 0], [0, 1]] },
+    "E": { "color": "#F2CC8F", "forma": [[0, 0], [1, 0]] }
+  },
+  "matriz": {
+    "ancho": 4,
+    "alto": 3,
+    "celdas": [
+      ["vacia", "vacia", "vacia", "vacia"],
+      ["vacia", "vacia", "vacia", "vacia"],
+      ["vacia", "vacia", "vacia", "vacia"]
+    ],
+    "piezasReferencia": []
+  },
+  "bandeja": ["A", "B", "C", "E"],
+  "piezas": [
+    {
+      "id": "PIEZA_01",
+      "nucleo": [[0, 0]],
+      "anclajes": [
+        { "orden": 1, "x": 1, "y": 0 },
+        { "orden": 2, "x": 0, "y": 1 }
+      ],
+      "iniciales": {},
+      "objetivo": { "1": "B", "2": "C" },
+      "posicionObjetivo": { "x": 0, "y": 0 },
+      "plantilla": [
+        "pila.push({{h1}})",
+        "pila.push({{h2}})",
+        "armar(pila.pop())",
+        "armar(pila.pop())"
+      ],
+      "huecos": {
+        "h1": { "tipo": "lista", "opciones": ["\"A\"", "\"B\"", "\"C\"", "\"E\""] },
+        "h2": { "tipo": "lista", "opciones": ["\"A\"", "\"B\"", "\"C\"", "\"E\""] }
+      },
+      "solucion": { "h1": "\"C\"", "h2": "\"B\"" }
+    },
+    {
+      "id": "PIEZA_02",
+      "nucleo": [[0, 0], [1, 0], [2, 0]],
+      "anclajes": [
+        { "orden": 1, "x": 0, "y": 1 },
+        { "orden": 2, "x": 1, "y": 1 }
+      ],
+      "iniciales": {},
+      "objetivo": { "1": "A", "2": "E" },
+      "posicionObjetivo": { "x": 1, "y": 1 },
+      "plantilla": [
+        "pila.push({{h1}})",
+        "pila.push({{h2}})",
+        "armar(pila.pop())",
+        "armar(pila.pop())"
+      ],
+      "huecos": {
+        "h1": { "tipo": "lista", "opciones": ["\"A\"", "\"B\"", "\"C\"", "\"E\""] },
+        "h2": { "tipo": "lista", "opciones": ["\"A\"", "\"B\"", "\"C\"", "\"E\""] }
+      },
+      "solucion": { "h1": "\"E\"", "h2": "\"A\"" }
+    }
+  ],
+  "pistas": [
+    {
+      "id": "P1",
+      "pieza": "PIEZA_01",
+      "texto": "Mira el hueco en forma de L de la esquina: el primer anclaje es el de arriba. El primero en armarse es el último que entró a la pila."
+    },
+    {
+      "id": "P2",
+      "pieza": "PIEZA_01",
+      "texto": "El elemento largo y horizontal va en el anclaje 1, así que debe entrar a la pila en segundo lugar."
+    },
+    {
+      "id": "P3",
+      "pieza": "PIEZA_02",
+      "texto": "Si el elemento de dos cuadros se arma primero, choca. Entra a la pila antes que el cuadro suelto."
+    }
+  ],
+  "dialogos": { "inicio": "intro_N02", "exito": "exito_generico" }
+}

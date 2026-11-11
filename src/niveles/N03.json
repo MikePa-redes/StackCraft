@@ -1,0 +1,61 @@
+{
+  "id": "N03",
+  "etapa": "stack",
+  "titulo": "Desarmar con cuidado",
+  "operaciones": ["push", "pop", "armar", "desarmar", "devolver"],
+  "desarmado": "lifo",
+  "ordenPiezas": ["PIEZA_01"],
+  "elementos": {
+    "A": { "color": "#E07A5F", "forma": [[0, 0]] },
+    "B": { "color": "#3D405B", "forma": [[0, 0], [1, 0]] },
+    "C": { "color": "#81B29A", "forma": [[0, 0], [0, 1]] }
+  },
+  "matriz": {
+    "ancho": 3,
+    "alto": 3,
+    "celdas": [
+      ["vacia", "vacia", "fuera"],
+      ["vacia", "vacia", "vacia"],
+      ["vacia", "fuera", "fuera"]
+    ],
+    "piezasReferencia": []
+  },
+  "bandeja": ["C"],
+  "piezas": [
+    {
+      "id": "PIEZA_01",
+      "nucleo": [[0, 0]],
+      "anclajes": [
+        { "orden": 1, "x": 1, "y": 0 },
+        { "orden": 2, "x": 0, "y": 1 },
+        { "orden": 3, "x": 1, "y": 1 }
+      ],
+      "iniciales": { "1": "A", "2": "B" },
+      "objetivo": { "1": "A", "2": "C", "3": "B" },
+      "posicionObjetivo": { "x": 0, "y": 0 },
+      "plantilla": [
+        "pila.push(desarmar(PIEZA_01))",
+        "pila.push({{h1}})",
+        "armar(pila.pop())",
+        "armar(pila.pop())"
+      ],
+      "huecos": {
+        "h1": { "tipo": "lista", "opciones": ["\"A\"", "\"B\"", "\"C\""] }
+      },
+      "solucion": { "h1": "\"C\"" }
+    }
+  ],
+  "pistas": [
+    {
+      "id": "P1",
+      "pieza": "PIEZA_01",
+      "texto": "Desarmar siempre saca lo último que se acopló: el elemento largo horizontal. El primer armar debe poner en el anclaje 2 el elemento vertical, que está en la bandeja."
+    },
+    {
+      "id": "P2",
+      "pieza": "PIEZA_01",
+      "texto": "El elemento sacado ya está en la pila. Mete en el hueco el elemento vertical de la bandeja para que quede encima y salga primero."
+    }
+  ],
+  "dialogos": { "inicio": "intro_N03", "exito": "exito_generico" }
+}

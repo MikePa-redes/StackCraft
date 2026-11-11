@@ -8,9 +8,10 @@ interface Props {
   partida: Partida;
   /** Sin función, el botón de pistas queda deshabilitado. */
   alPedirPista?: () => void;
+  alMenu: () => void;
 }
 
-export function BarraSuperior({ partida, alPedirPista }: Props) {
+export function BarraSuperior({ partida, alPedirPista, alMenu }: Props) {
   const { nivel, juego } = partida;
   const total = nivel.piezas.length;
   const colocadas = nivel.piezas.filter((p) => juego.piezas[p.id]?.estado === 'colocada').length;
@@ -37,8 +38,8 @@ export function BarraSuperior({ partida, alPedirPista }: Props) {
       <button className="boton" type="button" disabled={!alPedirPista || nivel.pistas.length === 0} onClick={alPedirPista}>
         Pista
       </button>
-      <button className="boton boton--secundario" type="button" disabled>
-        Configuración
+      <button className="boton boton--secundario" type="button" onClick={alMenu}>
+        Menú
       </button>
     </header>
   );

@@ -1,20 +1,21 @@
 import { useEffect, useReducer, useState } from 'react';
-import { cargarNivel } from '../motor/cargador';
 import { crearPartida, puedeDeshacer, puedeEditar, reducirPartida } from '../motor/partida';
 import { resumirPartida, type ResumenNivel } from '../motor/resultados';
 import { huecosCompletos } from '../motor/reproduccion';
-import datosN05 from '../niveles/N05.json';
+import type { Nivel } from '../motor/tipos';
 import { Avatar } from './componentes/Avatar';
 import { DialogoPistas } from './componentes/DialogoPistas';
 import { PiezaArrastrada } from './componentes/PiezaArrastrada';
 import { Resultados } from './componentes/Resultados';
+import { SeleccionNiveles } from './componentes/SeleccionNiveles';
 import { BarraSuperior } from './componentes/BarraSuperior';
 import { Bandeja, Estructuras } from './componentes/Estructuras';
 import { Matriz } from './componentes/Matriz';
 import { PanelCodigo } from './componentes/PanelCodigo';
 import { PanelPiezas } from './componentes/PanelPiezas';
 import { Volador } from './componentes/Volador';
-import { guardarResultado, type Guardado } from './guardado';
+import { guardarResultado, leerMejores, type Guardado } from './guardado';
+import { NIVELES } from './niveles';
 import { textoAvatar, textoExito } from './textoAvatar';
 import { useArrastre } from './useArrastre';
 import { useCronometro } from './useCronometro';
@@ -22,8 +23,7 @@ import { useEjecucion } from './useEjecucion';
 import './estilos/juego.css';
 import './estilos/codigo.css';
 import './estilos/superposiciones.css';
-
-const NIVEL = cargarNivel(datosN05);
+import './estilos/menu.css';
 
 const AVISOS: Record<string, string> = {
   en_espera: 'Esta pieza está en espera: primero deja fija la anterior.',
@@ -31,10 +31,20 @@ const AVISOS: Record<string, string> = {
   colocada: 'Esta pieza ya está colocada en la matriz.',
 };
 
-/** Cada intento monta un juego nuevo: reiniciar no deja residuos (ni huecos). */
+/** Alterna entre la selección de niveles y el juego; cada intento monta un juego nuevo. */
 export function App() {
+  const [nivelId, setNivelId] = useState<string | null>(null);
   const [intento, setIntento] = useState(0);
-  return <Juego key={intento} alReiniciar={() => setIntento((i) => i + 1)} />;
+  const nivel = NIVELES.find((n) => n.id === nivelId);
+  if (!nivel) return <SeleccionNiveles niveles={NIVELES} mejores={leerMejores()} alElegir={setNivelId} />;
+  return (
+    <Juego
+      key={`${nivel.id}-${intento}`}
+      nivel={nivel}
+      alReiniciar={() => setIntento((i) => i + 1)}
+      alMenu={() => setNivelId(null)}
+    />
+  );
 }
 
 interface Final {
@@ -44,8 +54,8 @@ interface Final {
 }
 
 /** Pantalla de juego con sus siete áreas (mecánicas §3). */
-function Juego({ alReiniciar }: { alReiniciar: () => void }) {
-  const [partida, dispatch] = useReducer(reducirPartida, NIVEL, crearPartida);
+function Juego({ nivel: nivelInicial, alReiniciar, alMenu }: { nivel: Nivel; alReiniciar: () => void; alMenu: () => void }) {
+  const [partida, dispatch] = useReducer(reducirPartida, nivelInicial, crearPartida);
   const ej = useEjecucion(partida, dispatch);
   const arr = useArrastre(partida, dispatch);
   useCronometro(partida, dispatch);
@@ -66,7 +76,7 @@ function Juego({ alReiniciar }: { alReiniciar: () => void }) {
   const editable = puedeEditar(partida) && !ej.reproduciendo;
   return (
     <main className="juego">
-      <BarraSuperior partida={partida} alPedirPista={partida.completado ? undefined : () => setPidiendoPista(true)} />
+      <BarraSuperior partida={partida} alMenu={alMenu} alPedirPista={partida.completado ? undefined : () => setPidiendoPista(true)} />
       <div className="juego__lateral">
         <PanelPiezas
           partida={{ ...partida, juego }}
@@ -124,6 +134,7 @@ function Juego({ alReiniciar }: { alReiniciar: () => void }) {
           resumen={final.resumen}
           guardado={final.guardado}
           alRepetir={alReiniciar}
+          alMenu={alMenu}
           alContinuar={() => setFinal({ ...final, visible: false })}
         />
       )}

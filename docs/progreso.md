@@ -11,7 +11,7 @@
 - [x] Fase 6: interfaz estática
 - [x] Fase 7: panel de código y ejecución
 - [x] Fase 8: colocación, pistas, resultados y guardado
-- [ ] Fase 9: cierre del MVP
+- [x] Fase 9: cierre del MVP
 
 ## Decisiones
 
@@ -243,3 +243,71 @@
 - Verificado en navegador (1280×720): pistas, arrastre válido/inválido,
   resultados, guardado, reinicio y pausa por blur. Sin prueba automática de UI
   (Vitest solo cubre el motor).
+
+### Fase 9 (2026-11-05)
+
+- `ui/niveles.ts` carga todos los `src/niveles/*.json` (orden por id).
+  `SeleccionNiveles.tsx` + `menu.css`: pantalla inicial con una tarjeta por
+  nivel (etapa, id, título, mejores estrellas y tiempo desde `guardado`).
+- `App` alterna entre selección y juego (`key` = nivel + intento). El botón
+  "Configuración" (deshabilitado) de la barra pasó a ser "Menú", que vuelve a
+  la selección; no hay pausa por menú porque el nivel se descarta al salir
+  (el progreso del nivel en curso no se guarda).
+- Resultados: "Continuar" se reemplazó por "Ver tablero" (cierra la capa) y
+  "Volver al menú".
+- No se definió bloqueo de niveles: todos están disponibles (mecánicas no
+  lo pide).
+- `npm run verificar`: 1 nivel (N05), OK. `npm test`: 119 pruebas OK.
+  `npm run build`: OK (`dist/stack-craft.html`, ~497 kB).
+- `docs/prueba-manual.md`: lista de verificación manual. Aún no ejecutada
+  entera a mano; solo se comprobó que la tarjeta abre el nivel y que el menú
+  se muestra.
+- Pendiente: solo existe el nivel N05; faltan los demás niveles del diseño
+  y la comprobación de solución única (§10).
+
+### Estilo retro oscuro (2026-11-05)
+
+- Tema oscuro con acentos azules, todo desde `tokens.css`: fondo azul-negro,
+  superficies azul noche, `--color-acento` (#3d8bff) y `--color-acento-claro`
+  (#6cc6ff). Nuevas variables: `--color-sobre-acento`, `--color-brillo`,
+  `--fuente-retro`, `--sombra-acento`, `--sombra-pulsada`.
+- Retro: radio 0, bordes de 2–3 px, sombras duras sin desenfoque, botones
+  que se hunden al pulsar, transiciones en pasos (`steps(6)`), textos en
+  JetBrains Mono y scanlines con `body::after` (sin dependencias nuevas).
+- Se mantiene la paleta Okabe-Ito de los elementos. Las piezas de
+  referencia pasaron a azul grisáceo oscuro.
+- Verificado en navegador (menú y juego); `npm run build` OK. Sin revisar
+  aún diálogos de pistas/resultados ni el arrastre con el nuevo tema.
+
+### Niveles (plan de 10)
+
+- Etapa 1 (Stack: entrada): N01 "Entra uno, sale el último" — solo `push`
+  (una pieza, dos elementos); `npm run verificar`: OK. N02 "El último en entrar" — solo `push` (el
+  resto en la plantilla); `npm run verificar`: OK.
+- Etapa 2 (Stack: salida y desarmado): N03 "Desarmar con cuidado" — `desarmar`
+  (una pieza mal armada, un desarmado LIFO; `devolver` explicado y permitido,
+  no exigido porque bandeja/pila/cola deben terminar vacías); verificador: OK.
+  N04 "Desarmar para armar" — antes N05 (renombrado: id, clave `intro_N04`,
+  se añadió `devolver` a `operaciones`); dos piezas, la pieza en espera se
+  desarma desde el código de la pieza en turno; verificador: OK.
+- Etapa 3 (Queue): N05 "El primero en entrar" — `enqueue`/`dequeue` (una
+  pieza, tres elementos, solo cola, FIFO; matriz con celdas `fuera`);
+  verificador: OK. N06 "Desarmar en cola" — `cola.enqueue(desarmar(PIEZA_02))`
+  (dos piezas; el desarmado FIFO saca C y deja A, con LIFO saldría A);
+  verificador: OK.
+- Etapa 4 (Transferencias): N07 "Pasar de pila a cola" — `cola.enqueue(pila.pop())`
+  (una pieza, tres elementos, huecos mixtos; verificador: OK). N08 "Tres piezas,
+  un relevo" — dos transferencias `pila.push(cola.dequeue())` (tres piezas en
+  orden, en espera desarmadas desde otra, bandeja vacía; verificador: OK).
+- Etapa 5 (Integración): N09 "Planear el desarmado" — plantilla mínima
+  (huecos de texto libre); matriz 7x6 irregular con celdas fuera/fija y 3
+  piezas de referencia, 4 piezas, LIFO; verificador: OK. N10 "Stack-Craft" —
+  nivel final, plantilla vacía (solo comentarios y líneas libres), matriz 8x5,
+  4 piezas, FIFO; usa push, pop, enqueue, dequeue, armar, desarmar, devolver y
+  ambas transferencias; verificador: OK.
+- Plan de 10 niveles completo: N01 Entra uno, sale el último · N02 El último en
+  entrar · N03 Desarmar con cuidado · N04 Desarmar para armar · N05 El primero
+  en entrar · N06 Desarmar en cola · N07 Pasar de pila a cola · N08 Tres piezas,
+  un relevo · N09 Planear el desarmado · N10 Stack-Craft.
+- `npm run verificar`: 10 niveles, 0 con problemas. Solución única (§10) aún
+  sin comprobar automáticamente.

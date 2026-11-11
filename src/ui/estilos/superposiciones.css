@@ -51,7 +51,8 @@
   padding: var(--espacio);
   border-radius: var(--radio);
   background: var(--color-superficie);
-  box-shadow: var(--sombra);
+  border: var(--borde-grueso) solid var(--color-acento);
+  box-shadow: var(--sombra-acento);
 }
 .dialogo p { margin: 0; line-height: 1.45; }
 .dialogo__titulo { margin: 0; font-size: var(--texto-normal); }

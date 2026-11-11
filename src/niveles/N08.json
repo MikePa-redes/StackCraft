@@ -1,0 +1,119 @@
+{
+  "id": "N08",
+  "etapa": "transferencias",
+  "titulo": "Tres piezas, un relevo",
+  "operaciones": ["push", "pop", "enqueue", "dequeue", "armar", "desarmar", "devolver"],
+  "desarmado": "lifo",
+  "ordenPiezas": ["PIEZA_01", "PIEZA_02", "PIEZA_03"],
+  "elementos": {
+    "A": { "color": "#E07A5F", "forma": [[0, 0]] },
+    "B": { "color": "#56B4E9", "forma": [[0, 0], [1, 0]] },
+    "C": { "color": "#81B29A", "forma": [[0, 0], [0, 1]] },
+    "D": { "color": "#3D405B", "forma": [[0, 0], [1, 0], [2, 0]] },
+    "E": { "color": "#F2CC8F", "forma": [[0, 0], [0, 1], [0, 2]] },
+    "F": { "color": "#CC79A7", "forma": [[0, 0], [0, 1], [1, 1]] }
+  },
+  "matriz": {
+    "ancho": 4,
+    "alto": 5,
+    "celdas": [
+      ["vacia", "vacia", "vacia", "vacia"],
+      ["vacia", "vacia", "vacia", "vacia"],
+      ["fuera", "vacia", "vacia", "vacia"],
+      ["fuera", "vacia", "vacia", "vacia"],
+      ["fuera", "vacia", "vacia", "vacia"]
+    ],
+    "piezasReferencia": []
+  },
+  "bandeja": [],
+  "piezas": [
+    {
+      "id": "PIEZA_01",
+      "nucleo": [[0, 0]],
+      "anclajes": [
+        { "orden": 1, "x": 1, "y": 0 },
+        { "orden": 2, "x": 0, "y": 1 }
+      ],
+      "iniciales": { "1": "B", "2": "E" },
+      "objetivo": { "1": "D", "2": "A" },
+      "posicionObjetivo": { "x": 0, "y": 0 },
+      "plantilla": [
+        "cola.enqueue(desarmar({{h1}}))",
+        "cola.enqueue(desarmar({{h2}}))",
+        "pila.push(desarmar({{h3}}))",
+        "pila.push(desarmar({{h4}}))",
+        "armar(pila.pop())",
+        "armar(pila.pop())"
+      ],
+      "huecos": {
+        "h1": { "tipo": "lista", "opciones": ["PIEZA_01", "PIEZA_02", "PIEZA_03"] },
+        "h2": { "tipo": "lista", "opciones": ["PIEZA_01", "PIEZA_02", "PIEZA_03"] },
+        "h3": { "tipo": "lista", "opciones": ["PIEZA_01", "PIEZA_02", "PIEZA_03"] },
+        "h4": { "tipo": "lista", "opciones": ["PIEZA_01", "PIEZA_02", "PIEZA_03"] }
+      },
+      "solucion": { "h1": "PIEZA_01", "h2": "PIEZA_01", "h3": "PIEZA_03", "h4": "PIEZA_03" }
+    },
+    {
+      "id": "PIEZA_02",
+      "nucleo": [[0, 0]],
+      "anclajes": [
+        { "orden": 1, "x": 1, "y": 0 },
+        { "orden": 2, "x": 0, "y": 1 }
+      ],
+      "iniciales": { "1": "F", "2": "C" },
+      "objetivo": { "1": "B", "2": "E" },
+      "posicionObjetivo": { "x": 1, "y": 1 },
+      "plantilla": [
+        "cola.enqueue(desarmar({{h1}}))",
+        "cola.enqueue(desarmar({{h2}}))",
+        "pila.push(cola.dequeue())",
+        "pila.push(cola.dequeue())",
+        "armar(pila.pop())",
+        "armar(pila.pop())"
+      ],
+      "huecos": {
+        "h1": { "tipo": "texto" },
+        "h2": { "tipo": "texto" }
+      },
+      "solucion": { "h1": "PIEZA_02", "h2": "PIEZA_02" }
+    },
+    {
+      "id": "PIEZA_03",
+      "nucleo": [[0, 0]],
+      "anclajes": [
+        { "orden": 1, "x": 1, "y": 0 },
+        { "orden": 2, "x": 0, "y": 1 }
+      ],
+      "iniciales": { "1": "D", "2": "A" },
+      "objetivo": { "1": "C", "2": "F" },
+      "posicionObjetivo": { "x": 2, "y": 2 },
+      "plantilla": [
+        "armar({{h1}})",
+        "armar({{h2}})"
+      ],
+      "huecos": {
+        "h1": { "tipo": "lista", "opciones": ["pila.pop()", "cola.dequeue()"] },
+        "h2": { "tipo": "lista", "opciones": ["pila.pop()", "cola.dequeue()"] }
+      },
+      "solucion": { "h1": "cola.dequeue()", "h2": "cola.dequeue()" }
+    }
+  ],
+  "pistas": [
+    {
+      "id": "P1",
+      "pieza": "PIEZA_01",
+      "texto": "PIEZA_01 guarda sus sobrantes en la cola para PIEZA_02 y toma lo que necesita de PIEZA_03, que está en espera, usando la pila."
+    },
+    {
+      "id": "P2",
+      "pieza": "PIEZA_02",
+      "texto": "En la cola ya esperan los sobrantes de PIEZA_01. Los de PIEZA_02 entran detrás: los dos primeros de la cola pasan por la pila para invertirse."
+    },
+    {
+      "id": "P3",
+      "pieza": "PIEZA_03",
+      "texto": "Lo que queda en la cola ya está en el orden correcto para PIEZA_03: no hace falta la pila."
+    }
+  ],
+  "dialogos": { "inicio": "intro_N08", "exito": "exito_generico" }
+}

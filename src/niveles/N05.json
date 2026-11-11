@@ -1,10 +1,10 @@
 {
   "id": "N05",
-  "etapa": "stack",
-  "titulo": "Desarmar para armar",
-  "operaciones": ["push", "pop", "armar", "desarmar"],
-  "desarmado": "lifo",
-  "ordenPiezas": ["PIEZA_01", "PIEZA_02"],
+  "etapa": "queue",
+  "titulo": "El primero en entrar",
+  "operaciones": ["enqueue", "dequeue", "armar"],
+  "desarmado": "fifo",
+  "ordenPiezas": ["PIEZA_01"],
   "elementos": {
     "A": { "color": "#E07A5F", "forma": [[0, 0]] },
     "B": { "color": "#3D405B", "forma": [[0, 0], [1, 0]] },
@@ -15,59 +15,50 @@
     "alto": 3,
     "celdas": [
       ["vacia", "vacia", "vacia"],
-      ["vacia", "vacia", "vacia"],
-      ["vacia", "fija", "fija"]
+      ["vacia", "vacia", "fuera"],
+      ["vacia", "fuera", "fuera"]
     ],
-    "piezasReferencia": [
-      { "id": "REF_01", "celdas": [[1, 2], [2, 2]] }
-    ]
+    "piezasReferencia": []
   },
-  "bandeja": ["A"],
+  "bandeja": ["A", "B", "C"],
   "piezas": [
     {
       "id": "PIEZA_01",
       "nucleo": [[0, 0]],
       "anclajes": [
         { "orden": 1, "x": 1, "y": 0 },
-        { "orden": 2, "x": 0, "y": 1 }
+        { "orden": 2, "x": 0, "y": 1 },
+        { "orden": 3, "x": 1, "y": 1 }
       ],
-      "iniciales": { "1": "C" },
-      "objetivo": { "1": "B", "2": "C" },
+      "iniciales": {},
+      "objetivo": { "1": "B", "2": "C", "3": "A" },
       "posicionObjetivo": { "x": 0, "y": 0 },
       "plantilla": [
-        "pila.push(desarmar({{h1}}))",
-        "pila.push(desarmar({{h2}}))",
-        "armar(pila.pop())",
-        "armar(pila.pop())"
+        "cola.enqueue({{h1}})",
+        "cola.enqueue({{h2}})",
+        "cola.enqueue({{h3}})",
+        "armar(cola.dequeue())",
+        "armar(cola.dequeue())",
+        "armar(cola.dequeue())"
       ],
       "huecos": {
-        "h1": { "tipo": "lista", "opciones": ["PIEZA_01", "PIEZA_02"] },
-        "h2": { "tipo": "lista", "opciones": ["PIEZA_01", "PIEZA_02"] }
+        "h1": { "tipo": "lista", "opciones": ["\"A\"", "\"B\"", "\"C\""] },
+        "h2": { "tipo": "lista", "opciones": ["\"A\"", "\"B\"", "\"C\""] },
+        "h3": { "tipo": "lista", "opciones": ["\"A\"", "\"B\"", "\"C\""] }
       },
-      "solucion": { "h1": "PIEZA_01", "h2": "PIEZA_02" }
-    },
-    {
-      "id": "PIEZA_02",
-      "nucleo": [[0, 0]],
-      "anclajes": [{ "orden": 1, "x": 1, "y": 0 }],
-      "iniciales": { "1": "B" },
-      "objetivo": { "1": "A" },
-      "posicionObjetivo": { "x": 1, "y": 1 },
-      "plantilla": [
-        "pila.push({{h1}})",
-        "armar(pila.pop())"
-      ],
-      "huecos": {
-        "h1": { "tipo": "lista", "opciones": ["\"A\"", "\"B\"", "\"C\""] }
-      },
-      "solucion": { "h1": "\"A\"" }
+      "solucion": { "h1": "\"B\"", "h2": "\"C\"", "h3": "\"A\"" }
     }
   ],
   "pistas": [
     {
       "id": "P1",
       "pieza": "PIEZA_01",
-      "texto": "Lo último que entra a la pila es lo primero que sale. ¿Qué elemento necesitas en el primer anclaje?"
+      "texto": "En la cola el primero en entrar es el primero en salir: el orden de entrada es el orden de armado."
+    },
+    {
+      "id": "P2",
+      "pieza": "PIEZA_01",
+      "texto": "El anclaje 1 es el de la derecha del núcleo y recibe el elemento horizontal; el 2, el de abajo, el vertical."
     }
   ],
   "dialogos": { "inicio": "intro_N05", "exito": "exito_generico" }

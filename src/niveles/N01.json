@@ -1,0 +1,59 @@
+{
+  "id": "N01",
+  "etapa": "stack",
+  "titulo": "Entra uno, sale el último",
+  "operaciones": ["push", "pop", "armar"],
+  "desarmado": "lifo",
+  "ordenPiezas": ["PIEZA_01"],
+  "elementos": {
+    "A": { "color": "#E07A5F", "forma": [[0, 0]] },
+    "B": { "color": "#3D405B", "forma": [[0, 0], [1, 0]] }
+  },
+  "matriz": {
+    "ancho": 3,
+    "alto": 2,
+    "celdas": [
+      ["vacia", "vacia", "vacia"],
+      ["vacia", "fuera", "fuera"]
+    ],
+    "piezasReferencia": []
+  },
+  "bandeja": ["A", "B"],
+  "piezas": [
+    {
+      "id": "PIEZA_01",
+      "nucleo": [[0, 0]],
+      "anclajes": [
+        { "orden": 1, "x": 1, "y": 0 },
+        { "orden": 2, "x": 0, "y": 1 }
+      ],
+      "iniciales": {},
+      "objetivo": { "1": "B", "2": "A" },
+      "posicionObjetivo": { "x": 0, "y": 0 },
+      "plantilla": [
+        "pila.push({{h1}})",
+        "pila.push({{h2}})",
+        "armar(pila.pop())",
+        "armar(pila.pop())"
+      ],
+      "huecos": {
+        "h1": { "tipo": "lista", "opciones": ["\"A\"", "\"B\""] },
+        "h2": { "tipo": "lista", "opciones": ["\"A\"", "\"B\""] }
+      },
+      "solucion": { "h1": "\"A\"", "h2": "\"B\"" }
+    }
+  ],
+  "pistas": [
+    {
+      "id": "P1",
+      "pieza": "PIEZA_01",
+      "texto": "El primer armar usa el anclaje 1, el de la derecha del núcleo. Ahí va el elemento largo, y armar toma lo que sale de la pila."
+    },
+    {
+      "id": "P2",
+      "pieza": "PIEZA_01",
+      "texto": "El último en entrar es el primero en salir: el cuadro suelto entra primero y el elemento largo entra después."
+    }
+  ],
+  "dialogos": { "inicio": "intro_N01", "exito": "exito_generico" }
+}

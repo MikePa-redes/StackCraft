@@ -1,0 +1,85 @@
+{
+  "id": "N06",
+  "etapa": "queue",
+  "titulo": "Desarmar en cola",
+  "operaciones": ["enqueue", "dequeue", "armar", "desarmar", "devolver"],
+  "desarmado": "fifo",
+  "ordenPiezas": ["PIEZA_01", "PIEZA_02"],
+  "elementos": {
+    "A": { "color": "#E07A5F", "forma": [[0, 0]] },
+    "C": { "color": "#81B29A", "forma": [[0, 0], [0, 1]] },
+    "D": { "color": "#3D405B", "forma": [[0, 0], [1, 0], [2, 0]] },
+    "E": { "color": "#F2CC8F", "forma": [[0, 0], [1, 0]] }
+  },
+  "matriz": {
+    "ancho": 4,
+    "alto": 3,
+    "celdas": [
+      ["vacia", "vacia", "vacia", "vacia"],
+      ["vacia", "vacia", "vacia", "vacia"],
+      ["vacia", "vacia", "vacia", "vacia"]
+    ],
+    "piezasReferencia": []
+  },
+  "bandeja": ["D", "E"],
+  "piezas": [
+    {
+      "id": "PIEZA_01",
+      "nucleo": [[0, 0]],
+      "anclajes": [
+        { "orden": 1, "x": 1, "y": 0 },
+        { "orden": 2, "x": 0, "y": 1 }
+      ],
+      "iniciales": {},
+      "objetivo": { "1": "D", "2": "C" },
+      "posicionObjetivo": { "x": 0, "y": 0 },
+      "plantilla": [
+        "cola.enqueue({{h1}})",
+        "cola.enqueue(desarmar(PIEZA_02))",
+        "armar(cola.dequeue())",
+        "armar(cola.dequeue())"
+      ],
+      "huecos": {
+        "h1": { "tipo": "lista", "opciones": ["\"A\"", "\"C\"", "\"D\"", "\"E\""] }
+      },
+      "solucion": { "h1": "\"D\"" }
+    },
+    {
+      "id": "PIEZA_02",
+      "nucleo": [[0, 0], [1, 0], [2, 0]],
+      "anclajes": [
+        { "orden": 1, "x": 1, "y": 1 },
+        { "orden": 2, "x": 0, "y": 1 }
+      ],
+      "iniciales": { "1": "C", "2": "A" },
+      "objetivo": { "1": "E", "2": "A" },
+      "posicionObjetivo": { "x": 1, "y": 1 },
+      "plantilla": [
+        "cola.enqueue({{h1}})",
+        "armar(cola.dequeue())"
+      ],
+      "huecos": {
+        "h1": { "tipo": "lista", "opciones": ["\"A\"", "\"C\"", "\"D\"", "\"E\""] }
+      },
+      "solucion": { "h1": "\"E\"" }
+    }
+  ],
+  "pistas": [
+    {
+      "id": "P1",
+      "pieza": "PIEZA_01",
+      "texto": "Con cola, desarmar(PIEZA_02) saca el elemento acoplado hace más tiempo, no el último. Con una pila habría salido otro."
+    },
+    {
+      "id": "P2",
+      "pieza": "PIEZA_01",
+      "texto": "PIEZA_01 necesita el elemento largo y luego el vertical; el vertical ya está en PIEZA_02. Solo falta enviar el largo antes."
+    },
+    {
+      "id": "P3",
+      "pieza": "PIEZA_02",
+      "texto": "Tras desarmar, PIEZA_02 conserva su elemento pequeño. Su anclaje libre es el 1: ahí va el elemento horizontal corto."
+    }
+  ],
+  "dialogos": { "inicio": "intro_N06", "exito": "exito_generico" }
+}

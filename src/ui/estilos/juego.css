@@ -19,14 +19,15 @@
   border: var(--borde) solid var(--color-borde);
   border-radius: var(--radio);
   background: var(--color-superficie);
+  box-shadow: var(--sombra);
 }
 
 .area__titulo {
   margin: 0 0 var(--espacio-chico);
   color: var(--color-texto-secundario);
   font-size: var(--texto-titulo);
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
@@ -35,7 +36,7 @@
   font-family: var(--fuente-codigo);
   letter-spacing: 0;
   text-transform: none;
-  color: var(--color-acento);
+  color: var(--color-acento-claro);
 }
 
 .vacio {
@@ -50,22 +51,29 @@
   border: var(--borde) solid var(--color-acento);
   border-radius: var(--radio);
   background: var(--color-acento);
-  color: var(--color-superficie);
+  color: var(--color-sobre-acento);
   font: inherit;
   font-size: var(--texto-pequeno);
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: var(--sombra);
   cursor: pointer;
-  transition: opacity var(--transicion-duracion) var(--transicion-curva);
 }
+.boton:hover:not(:disabled) { background: var(--color-acento-claro); border-color: var(--color-acento-claro); }
+.boton:active:not(:disabled) { transform: translate(3px, 3px); box-shadow: var(--sombra-pulsada); }
+.boton:focus-visible { outline: var(--borde) dashed var(--color-acento-claro); outline-offset: 3px; }
 
 .boton--secundario {
   background: var(--color-superficie);
-  color: var(--color-acento);
+  color: var(--color-acento-claro);
 }
+.boton--secundario:hover:not(:disabled) { background: var(--color-hueco-fondo); color: var(--color-texto); }
 
 .boton:disabled {
-  opacity: 0.55;
-  cursor: default;
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
 .insignia,
@@ -78,13 +86,15 @@
 
 .insignia {
   background: var(--color-acento);
-  color: var(--color-superficie);
+  color: var(--color-sobre-acento);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 .estado--en_espera { color: var(--color-espera); background: var(--color-silueta); }
 .estado--incompleta { color: var(--color-texto-secundario); background: var(--color-silueta); }
 .estado--fija,
-.estado--colocada { color: var(--color-superficie); background: var(--color-exito); }
+.estado--colocada { color: var(--color-sobre-acento); background: var(--color-exito); }
 
 /* ---- 1. Barra superior ---- */
 .barra {
@@ -94,7 +104,7 @@
   gap: var(--espacio);
 }
 
-.barra__marca { font-weight: 600; font-size: var(--texto-normal); color: var(--color-acento); }
+.barra__marca { font-weight: 700; font-size: var(--texto-normal); color: var(--color-acento-claro); text-transform: uppercase; letter-spacing: 0.12em; text-shadow: 2px 2px 0 var(--color-acento); }
 .barra__nivel { display: flex; align-items: center; gap: var(--espacio-chico); flex: 1; }
 .barra__progreso { display: flex; align-items: center; gap: var(--espacio-chico); font-size: var(--texto-pequeno); }
 .barra__progreso progress { accent-color: var(--color-exito); }
@@ -124,7 +134,7 @@
 .tarjeta { cursor: pointer; transition: border-color var(--transicion-duracion) var(--transicion-curva); }
 .tarjeta[aria-disabled='true'] { cursor: default; }
 .tarjeta:focus-visible { outline: var(--borde-grueso) solid var(--color-acento); outline-offset: var(--borde); }
-.tarjeta--seleccionada { border-color: var(--color-acento); box-shadow: var(--sombra); }
+.tarjeta--seleccionada { border-color: var(--color-acento-claro); box-shadow: var(--sombra-acento); }
 .tarjeta--en_espera { opacity: 0.6; }
 .tarjeta__info { display: flex; flex-direction: column; align-items: flex-start; gap: var(--espacio-mini); }
 .tarjeta__id { font-family: var(--fuente-codigo); font-size: var(--texto-pequeno); }
@@ -210,9 +220,9 @@
   stroke: var(--color-sombra-letra);
   stroke-width: 0.06;
   paint-order: stroke;
-  font-family: var(--fuente-texto);
+  font-family: var(--fuente-retro);
   font-size: var(--letra-bloque);
-  font-weight: 600;
+  font-weight: 700;
   text-anchor: middle;
   dominant-baseline: central;
   pointer-events: none;

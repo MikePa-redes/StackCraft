@@ -1,0 +1,41 @@
+/* Pantalla de selección de niveles */
+.seleccion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio);
+  min-width: var(--ancho-minimo);
+  min-height: var(--alto-minimo);
+  padding: var(--espacio);
+  box-sizing: border-box;
+}
+.seleccion__titulo { margin: var(--espacio) 0 0; font-size: 2.5rem; color: var(--color-acento-claro); text-transform: uppercase; letter-spacing: 0.2em; text-shadow: 4px 4px 0 var(--color-acento); }
+.seleccion__lema { margin: 0; color: var(--color-texto-secundario); }
+.seleccion__lista {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--espacio);
+  width: 100%;
+  max-width: 960px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tarjeta-nivel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espacio-chico);
+  width: 100%;
+  padding: var(--espacio);
+  border: var(--borde-grueso) solid var(--color-borde);
+  border-radius: var(--radio);
+  background: var(--color-superficie);
+  color: var(--color-texto);
+  font: inherit;
+  cursor: pointer;
+  box-shadow: var(--sombra);
+}
+.tarjeta-nivel:hover,
+.tarjeta-nivel:focus-visible { border-color: var(--color-acento-claro); box-shadow: var(--sombra-acento); outline: none; }
+.tarjeta-nivel__estrellas { font-size: var(--texto-grande); }

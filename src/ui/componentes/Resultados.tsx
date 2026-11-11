@@ -11,9 +11,10 @@ interface Props {
   guardado: Guardado;
   alRepetir: () => void;
   alContinuar: () => void;
+  alMenu: () => void;
 }
 
-export function Resultados({ titulo, mensaje, resumen, guardado, alRepetir, alContinuar }: Props) {
+export function Resultados({ titulo, mensaje, resumen, guardado, alRepetir, alContinuar, alMenu }: Props) {
   const { estadisticas: e } = resumen;
   const filas: [string, string][] = [
     ['Tiempo', formatoTiempo(resumen.tiempoMs)],
@@ -55,8 +56,11 @@ export function Resultados({ titulo, mensaje, resumen, guardado, alRepetir, alCo
           <button className="boton boton--secundario" type="button" onClick={alRepetir}>
             Repetir nivel
           </button>
-          <button className="boton" type="button" onClick={alContinuar} autoFocus>
-            Continuar
+          <button className="boton boton--secundario" type="button" onClick={alContinuar}>
+            Ver tablero
+          </button>
+          <button className="boton" type="button" onClick={alMenu} autoFocus>
+            Volver al menú
           </button>
         </div>
       </div>
